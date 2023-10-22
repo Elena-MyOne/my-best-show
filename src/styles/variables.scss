@@ -6,7 +6,7 @@ $md2: 992.98;
 $md3: 767.98;
 $md4: 479.98;
 
-$fontSize: 14px;
+$fontSize: 16px;
 $fontFamily: 'Open Sans', sans;
 
 $fontColor: #ffffff;
@@ -14,3 +14,13 @@ $bgColor: #222222;
 $hoverColor: #ec8f32;
 
 $transition: all 0.3s ease 0s;
+
+@mixin border {
+  border-radius: 50px;
+  border: 2px solid $fontColor;
+  transition: $transition;
+  cursor: pointer;
+  &:hover {
+    border: 2px solid $hoverColor;
+  }
+}
