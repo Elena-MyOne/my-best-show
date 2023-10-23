@@ -1,9 +1,10 @@
 import React from 'react';
-import './App.scss';
+import style from './App.module.scss';
 import Header from './components/Header/Header';
 import CardItems from './components/CardItems/CardItems';
 import { URL } from './models/enums';
 import { ShowData } from './models/interfaces';
+import { MdReportGmailerrorred } from 'react-icons/md';
 
 interface AppProps {
   props: string;
@@ -55,13 +56,18 @@ class App extends React.Component<AppProps, AppState> {
       <div className="wrapper">
         <Header />
         <main className="main">
-          {loading ? (
-            <p>Loading...</p>
-          ) : error ? (
-            <p>Error accrued please try later</p>
-          ) : (
-            <CardItems data={data} />
-          )}
+          <div className="container">
+            {loading ? (
+              <p className={style.loading}>Loading...</p>
+            ) : error ? (
+              <div className={style.error}>
+                <MdReportGmailerrorred />
+                <span className={style.text}>Error accrued please try later</span>
+              </div>
+            ) : (
+              <CardItems data={data} />
+            )}
+          </div>
         </main>
       </div>
     );
