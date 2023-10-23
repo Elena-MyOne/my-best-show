@@ -1,6 +1,7 @@
 import React from 'react';
 import style from './CardItems.module.scss';
 import { ShowData } from '../../models/interfaces';
+import Card from '../Card/Card';
 
 interface Props {
   props?: string;
@@ -22,7 +23,7 @@ class CardItems extends React.Component<Props, CardItemsProps> {
 
   componentDidMount() {
     if (this.props.data) {
-      const shows = this.props.data.slice(0, 10);
+      const shows = this.props.data.slice(0, 15);
       this.setState({ shows });
     }
   }
@@ -33,11 +34,11 @@ class CardItems extends React.Component<Props, CardItemsProps> {
     return (
       <div className={style.items}>
         {shows && (
-          <ul>
+          <div className={style.shows}>
             {shows.map((show) => (
-              <li key={show.id}>{show.name}</li>
+              <Card key={show.id} show={show} />
             ))}
-          </ul>
+          </div>
         )}
       </div>
     );
