@@ -10,7 +10,7 @@ class Header extends React.Component {
         <div className={`${style.body} container`}>
           <div className={style.logo}>
             <MdLocalMovies />
-            <span className={style.text}>My Best Show</span>
+            <span className={style.text}>Shows</span>
           </div>
           <div className={style.search}>
             <input type="text" className={style.input} placeholder="Search show..." />
