@@ -2,15 +2,43 @@ import React from 'react';
 import style from './CardItems.module.scss';
 import { ShowData } from '../../models/interfaces';
 
-interface CardItemsProps {
-  data: ShowData[] | null;
+interface Props {
+  props?: string;
+  data?: ShowData[] | null;
 }
 
-class CardItems extends React.Component<CardItemsProps> {
+interface CardItemsProps {
+  data?: ShowData[] | null;
+  shows?: ShowData[] | null;
+}
+
+class CardItems extends React.Component<Props, CardItemsProps> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      shows: null,
+    };
+  }
+
+  componentDidMount() {
+    if (this.props.data) {
+      const shows = this.props.data.slice(0, 10);
+      this.setState({ shows });
+    }
+  }
+
   render() {
+    const { shows } = this.state;
+
     return (
       <div className={style.items}>
-        <div className="">HomePage</div>
+        {shows && (
+          <ul>
+            {shows.map((show) => (
+              <li key={show.id}>{show.name}</li>
+            ))}
+          </ul>
+        )}
       </div>
     );
   }

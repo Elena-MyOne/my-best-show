@@ -62,7 +62,7 @@ class App extends React.Component<AppProps, AppState> {
             ) : error ? (
               <div className={style.error}>
                 <MdReportGmailerrorred />
-                <span className={style.text}>Error accrued please try later</span>
+                <span className={style.text}>Error occurred please try later</span>
               </div>
             ) : (
               <CardItems data={data} />
