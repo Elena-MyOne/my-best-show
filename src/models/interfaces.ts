@@ -1,4 +1,5 @@
-export interface Shows {
+export interface SearchShowsData {
+  score: number;
   shows: ShowData[];
 }
 
