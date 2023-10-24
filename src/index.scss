@@ -50,3 +50,17 @@ html {
   flex: 1 0 auto;
   color: $fontColor;
 }
+
+.button {
+  color: $fontColor;
+  font-size: inherit;
+  font-weight: 300;
+  background-color: $hoverColor;
+  cursor: pointer;
+  padding: 5px 20px;
+  border-radius: 20px;
+  transition: $transition;
+  &:hover {
+    background-color: $hoverActiveColor;
+  }
+}

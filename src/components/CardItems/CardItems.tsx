@@ -23,7 +23,8 @@ class CardItems extends React.Component<Props, CardItemsProps> {
 
   componentDidMount() {
     if (this.props.data) {
-      const shows = this.props.data.slice(0, 15);
+      // const shows = this.props.data.slice(0, 15);
+      const shows = this.props.data;
       this.setState({ shows });
     }
   }

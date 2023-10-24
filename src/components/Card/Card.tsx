@@ -19,10 +19,13 @@ class Card extends React.Component<CardProps> {
       show.ended ? '- ' + show.ended.slice(0, 4) : ''
     } `;
 
+    const image = show.image?.medium;
+
     return (
       <div className={style.card}>
         <div className={style.image}>
-          <img src={show.image.medium} alt="cover" />
+          {image && <img src={show.image.medium} alt="cover" />}
+
           <div className={style.top}>
             <div className={style.rating}>
               <AiFillStar />
