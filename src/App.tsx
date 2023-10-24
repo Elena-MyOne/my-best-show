@@ -12,6 +12,7 @@ interface AppProps {
   error: Error | null | unknown;
   currentPage: number;
   itemsPerPage: number;
+  isMoreShows: boolean;
 }
 class App extends React.Component<object, AppProps> {
   constructor(props: AppProps) {
@@ -21,10 +22,12 @@ class App extends React.Component<object, AppProps> {
       isLoading: false,
       error: null,
       currentPage: 0,
-      itemsPerPage: 25,
+      itemsPerPage: 20,
+      isMoreShows: false,
     };
 
     this.loadShows = this.loadShows.bind(this);
+    this.showMoreShows = this.showMoreShows.bind(this);
   }
 
   async componentDidMount() {
@@ -32,16 +35,13 @@ class App extends React.Component<object, AppProps> {
   }
 
   async loadShows() {
-    const { currentPage, itemsPerPage, isLoading } = this.state;
+    const { currentPage, isLoading } = this.state;
 
     if (isLoading) {
       return;
     }
 
     this.setState({ isLoading: true });
-
-    const startIndex = currentPage * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
 
     try {
       const response = await fetch(`${URL.SHOWS}?page=${currentPage}`);
@@ -51,10 +51,9 @@ class App extends React.Component<object, AppProps> {
       }
 
       const data: ShowData[] = await response.json();
-      const pageData = data.slice(startIndex, endIndex);
 
       this.setState({
-        shows: data.concat(pageData),
+        shows: data,
         currentPage: currentPage === 8 ? currentPage - 8 : currentPage + 1,
         isLoading: false,
       });
@@ -67,17 +66,23 @@ class App extends React.Component<object, AppProps> {
     }
   }
 
+  showMoreShows() {
+    this.setState(
+      (prevState) => ({
+        isMoreShows: !prevState.isMoreShows,
+      }),
+      () => {
+        console.log(this.state.isMoreShows);
+      }
+    );
+  }
+
   render() {
-    const { shows, isLoading, error, currentPage, itemsPerPage } = this.state;
+    const { shows, isLoading, error, currentPage, itemsPerPage, isMoreShows } = this.state;
 
     console.log(shows);
 
-    const startIndex = currentPage * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-
-    const currentPageItems = shows.slice(startIndex, endIndex);
-
-    console.log(currentPageItems);
+    const currentPageItems = shows.slice(0, itemsPerPage);
 
     return (
       <div className="wrapper">
@@ -94,14 +99,23 @@ class App extends React.Component<object, AppProps> {
             ) : (
               <>
                 <div className={style.top}>
-                  <h1 className={style.title}>TV Shows</h1>
+                  <h1 className="title">All Shows</h1>
                   {!isLoading && (
                     <button className="button" onClick={this.loadShows}>
-                      {currentPage === 0 ? 'Go back' : 'Sow more'}
+                      {currentPage === 0 ? 'Go back' : 'Next page'}
                     </button>
                   )}
                 </div>
-                <CardItems data={currentPageItems} />
+
+                {isMoreShows ? <CardItems data={shows} /> : <CardItems data={currentPageItems} />}
+
+                {!isLoading && (
+                  <div className={style.more}>
+                    <button className="button" onClick={this.showMoreShows}>
+                      {isMoreShows ? 'Show less' : 'Show more'}
+                    </button>
+                  </div>
+                )}
               </>
             )}
           </div>

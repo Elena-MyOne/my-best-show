@@ -15,7 +15,7 @@ class Card extends React.Component<CardProps> {
       return <div className={style.error}>No show data available</div>;
     }
 
-    const years = `${show.premiered.slice(0, 4)} ${
+    const years = `${show.premiered ? show.premiered.slice(0, 4) : ''} ${
       show.ended ? '- ' + show.ended.slice(0, 4) : ''
     } `;
 
