@@ -67,20 +67,13 @@ class App extends React.Component<object, AppProps> {
   }
 
   showMoreShows() {
-    this.setState(
-      (prevState) => ({
-        isMoreShows: !prevState.isMoreShows,
-      }),
-      () => {
-        console.log(this.state.isMoreShows);
-      }
-    );
+    this.setState((prevState) => ({
+      isMoreShows: !prevState.isMoreShows,
+    }));
   }
 
   render() {
     const { shows, isLoading, error, currentPage, itemsPerPage, isMoreShows } = this.state;
-
-    console.log(shows);
 
     const currentPageItems = shows.slice(0, itemsPerPage);
 
