@@ -15,13 +15,23 @@ class Header extends React.Component<object, HeaderProps> {
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleButtonClick = this.handleButtonClick.bind(this);
+  }
+
+  componentDidMount() {
+    const savedValue = localStorage.getItem('TVShowSearch') || '';
+    this.setState({ value: savedValue });
   }
 
   handleChange(e: React.FormEvent<HTMLInputElement>) {
     const target = e.currentTarget.value;
     this.setState({ value: target });
+  }
 
-    localStorage.setItem('TVShowSearch', target);
+  handleButtonClick() {
+    const { value } = this.state;
+    localStorage.setItem('TVShowSearch', value);
+    console.log('click');
   }
 
   render() {
@@ -44,7 +54,7 @@ class Header extends React.Component<object, HeaderProps> {
               onChange={this.handleChange}
               value={value}
             />
-            <button className={style.button}>
+            <button className={style.button} onClick={this.handleButtonClick}>
               <BsSearch />
             </button>
           </div>
