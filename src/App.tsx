@@ -5,6 +5,7 @@ import CardItems from './components/CardItems/CardItems';
 import { URL } from './models/enums';
 import { ShowData } from './models/interfaces';
 import { MdReportGmailerrorred } from 'react-icons/md';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 
 interface AppProps {
   shows: ShowData[];
@@ -149,43 +150,45 @@ class App extends React.Component<object, AppProps> {
         <Header handleSearch={this.handleSearch} value={''} />
         <main className="main">
           <div className="container">
-            {isLoading ? (
-              <p className={style.loading}>Loading...</p>
-            ) : error ? (
-              <div className={style.error}>
-                <MdReportGmailerrorred />
-                <span className={style.text}>Error occurred please try later</span>
-              </div>
-            ) : (
-              <>
-                <div className={style.top}>
-                  <h1 className="title">All Shows</h1>
-                  {!isLoading && (
-                    <button
-                      className="button"
-                      onClick={this.loadShows}
-                      disabled={isShowMoreButtonDisable}
-                    >
-                      {currentPage === 0 ? 'Go back' : 'Next page'}
-                    </button>
-                  )}
+            <ErrorBoundary>
+              {isLoading ? (
+                <p className={style.loading}>Loading...</p>
+              ) : error ? (
+                <div className={style.error}>
+                  <MdReportGmailerrorred />
+                  <span className={style.text}>Error occurred please try later</span>
                 </div>
-
-                {isMoreShows ? <CardItems data={shows} /> : <CardItems data={currentPageItems} />}
-
-                {!isLoading && (
-                  <div className={style.more}>
-                    <button
-                      className="button"
-                      onClick={this.showMoreShows}
-                      disabled={isShowMoreButtonDisable}
-                    >
-                      {isMoreShows ? 'Show less' : 'Show more'}
-                    </button>
+              ) : (
+                <>
+                  <div className={style.top}>
+                    <h1 className="title">All Shows</h1>
+                    {!isLoading && (
+                      <button
+                        className="button"
+                        onClick={this.loadShows}
+                        disabled={isShowMoreButtonDisable}
+                      >
+                        {currentPage === 0 ? 'Go back' : 'Next page'}
+                      </button>
+                    )}
                   </div>
-                )}
-              </>
-            )}
+
+                  {isMoreShows ? <CardItems data={shows} /> : <CardItems data={currentPageItems} />}
+
+                  {!isLoading && (
+                    <div className={style.more}>
+                      <button
+                        className="button"
+                        onClick={this.showMoreShows}
+                        disabled={isShowMoreButtonDisable}
+                      >
+                        {isMoreShows ? 'Show less' : 'Show more'}
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </ErrorBoundary>
           </div>
         </main>
       </div>
