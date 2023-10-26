@@ -108,6 +108,7 @@ const App: React.FC<AppProps> = () => {
   React.useEffect(() => {
     loadShows();
     enableButton();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const currentPageItems = shows.slice(0, itemsPerPage);

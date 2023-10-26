@@ -8,60 +8,46 @@ interface HeaderProps {
   handleSearch(): Promise<void>;
 }
 
-class Header extends React.Component<HeaderProps, { value: string }> {
-  constructor(props: HeaderProps) {
-    super(props);
-    this.state = {
-      value: props.value || '',
-    };
+const Header: React.FC<HeaderProps> = ({ handleSearch }) => {
+  const [value, setValue] = React.useState<string>('');
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleButtonClick = this.handleButtonClick.bind(this);
-  }
-
-  componentDidMount() {
+  React.useEffect(() => {
     const savedValue = localStorage.getItem('TVShowSearch') || '';
-    this.setState({ value: savedValue });
-  }
+    setValue(savedValue);
+  }, []);
 
-  handleChange(e: React.FormEvent<HTMLInputElement>) {
+  const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     const target = e.currentTarget.value;
-    this.setState({ value: target });
-  }
+    setValue(target);
+  };
 
-  handleButtonClick() {
-    const { value } = this.state;
-    const { handleSearch } = this.props;
+  const handleButtonClick = () => {
     localStorage.setItem('TVShowSearch', value);
     handleSearch();
-  }
+  };
 
-  render() {
-    const { value } = this.state;
-
-    return (
-      <header className={style.header}>
-        <div className={`${style.body} container`}>
-          <div className={style.logo}>
-            <MdLocalMovies />
-            <span className={style.text}>Shows</span>
-          </div>
-          <div className={style.search}>
-            <input
-              type="text"
-              className={style.input}
-              placeholder="Search show..."
-              onChange={this.handleChange}
-              value={value}
-            />
-            <button className={style.button} onClick={this.handleButtonClick}>
-              <BsSearch />
-            </button>
-          </div>
+  return (
+    <header className={style.header}>
+      <div className={`${style.body} container`}>
+        <div className={style.logo}>
+          <MdLocalMovies />
+          <span className={style.text}>Shows</span>
         </div>
-      </header>
-    );
-  }
-}
+        <div className={style.search}>
+          <input
+            type="text"
+            className={style.input}
+            placeholder="Search show..."
+            onChange={handleChange}
+            value={value}
+          />
+          <button className={style.button} onClick={handleButtonClick}>
+            <BsSearch />
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+};
 
 export default Header;
