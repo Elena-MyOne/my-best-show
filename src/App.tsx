@@ -161,7 +161,7 @@ class App extends React.Component<object, AppProps> {
               ) : (
                 <>
                   <div className={style.top}>
-                    <h1 className="title">All Shows</h1>
+                    <h1 className="title">TV Shows</h1>
                     {!isLoading && (
                       <button
                         className="button"
