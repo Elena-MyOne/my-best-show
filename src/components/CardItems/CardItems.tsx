@@ -11,8 +11,6 @@ class CardItems extends React.Component<Props> {
   render() {
     const { data } = this.props;
 
-    console.log('Данные шоу:', data);
-
     return (
       <div className={style.items}>
         {data && <div className={style.shows}>{this.renderData(data)}</div>}

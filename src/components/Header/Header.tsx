@@ -33,14 +33,11 @@ class Header extends React.Component<HeaderProps, { value: string }> {
     const { value } = this.state;
     const { handleSearch } = this.props;
     localStorage.setItem('TVShowSearch', value);
-    console.log('click');
     handleSearch();
   }
 
   render() {
     const { value } = this.state;
-
-    console.log(value);
 
     return (
       <header className={style.header}>
