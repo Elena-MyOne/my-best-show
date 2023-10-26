@@ -17,39 +17,23 @@ interface AppProps {
   searchQuery: string;
   isShowMoreButtonDisable: boolean;
 }
-class App extends React.Component<object, AppProps> {
-  constructor(props: AppProps) {
-    super(props);
-    this.state = {
-      shows: [],
-      isLoading: false,
-      error: null,
-      currentPage: 0,
-      itemsPerPage: 20,
-      isMoreShows: false,
-      searchQuery: '',
-      isShowMoreButtonDisable: false,
-    };
 
-    this.loadShows = this.loadShows.bind(this);
-    this.showMoreShows = this.showMoreShows.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
-    this.enableButton = this.enableButton.bind(this);
-  }
+const App: React.FC<AppProps> = () => {
+  const [shows, setShows] = React.useState<ShowData[]>([]);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<Error | null | unknown>(null);
+  const [currentPage, setCurrentPage] = React.useState(0);
+  const [itemsPerPage] = React.useState(20);
+  const [isMoreShows, setIsMoreShows] = React.useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = React.useState<string>('');
+  const [isShowMoreButtonDisable, setIsShowMoreButtonDisable] = React.useState<boolean>(false);
 
-  async componentDidMount() {
-    this.loadShows();
-    this.enableButton();
-  }
-
-  async loadShows() {
-    const { currentPage, isLoading } = this.state;
-
+  const loadShows = async () => {
     if (isLoading) {
       return;
     }
 
-    this.setState({ isLoading: true });
+    setIsLoading(true);
 
     try {
       const response = await fetch(`${URL.SHOWS}?page=${currentPage}`);
@@ -60,54 +44,47 @@ class App extends React.Component<object, AppProps> {
 
       const data: ShowData[] = await response.json();
 
-      this.setState({
-        shows: data,
-        currentPage: currentPage === 8 ? currentPage - 8 : currentPage + 1,
-        isLoading: false,
-      });
+      setShows(data);
+      setCurrentPage(currentPage === 8 ? currentPage - 8 : currentPage + 1);
+      setIsLoading(false);
     } catch (error) {
-      this.setState({
-        shows: [],
-        isLoading: false,
-        error,
-      });
+      setShows([]);
+      setIsLoading(false);
+      setError(error);
     }
-  }
+  };
 
-  enableButton() {
-    const { shows } = this.state;
-
-    if (shows.length > 20) {
-      this.setState({ isShowMoreButtonDisable: true });
+  const enableButton = () => {
+    if (shows.length >= 20) {
+      setIsShowMoreButtonDisable(true);
     } else {
-      this.setState({ isShowMoreButtonDisable: false });
+      setIsShowMoreButtonDisable(false);
     }
-  }
+  };
 
-  showMoreShows() {
-    this.setState((prevState) => ({
-      isMoreShows: !prevState.isMoreShows,
-    }));
-  }
+  const showMoreShows = () => {
+    setIsMoreShows((prev) => !prev);
+  };
 
-  getSearchChange() {
+  const getSearchChange = () => {
     const savedValue = localStorage.getItem('TVShowSearch') || '';
-    this.setState({ searchQuery: savedValue });
-  }
+    setSearchQuery(savedValue);
+  };
 
-  async handleSearch() {
-    this.getSearchChange();
+  const handleSearch = async () => {
+    getSearchChange();
 
     const savedValue = localStorage.getItem('TVShowSearch') || '';
 
     if (savedValue === '') {
-      this.loadShows();
-      this.enableButton();
+      loadShows();
+      enableButton();
       return;
     }
 
     try {
       // const response = await fetch(`${URL.SEARCH}${searchQuery}`);
+      console.log(searchQuery);
       const response = await fetch(`${URL.SEARCH}${savedValue}`);
 
       if (!response.ok) {
@@ -116,84 +93,73 @@ class App extends React.Component<object, AppProps> {
 
       const data: ShowData[] = await response.json();
 
-      this.setState({
-        shows: data,
-        isLoading: false,
-        currentPage: 0,
-      });
+      setShows(data);
+      setIsLoading(false);
+      setCurrentPage(0);
     } catch (error) {
-      this.setState({
-        shows: [],
-        isLoading: false,
-        error,
-      });
+      setShows([]);
+      setIsLoading(false);
+      setError(error);
     }
 
-    this.enableButton();
-  }
+    enableButton();
+  };
 
-  render() {
-    const {
-      shows,
-      isLoading,
-      error,
-      currentPage,
-      itemsPerPage,
-      isMoreShows,
-      isShowMoreButtonDisable,
-    } = this.state;
+  React.useEffect(() => {
+    loadShows();
+    enableButton();
+  }, []);
 
-    const currentPageItems = shows.slice(0, itemsPerPage);
+  const currentPageItems = shows.slice(0, itemsPerPage);
 
-    return (
-      <div className="wrapper">
-        <Header handleSearch={this.handleSearch} value={''} />
-        <main className="main">
-          <div className="container">
-            <ErrorBoundary>
-              {isLoading ? (
-                <p className={style.loading}>Loading...</p>
-              ) : error ? (
-                <div className={style.error}>
-                  <MdReportGmailerrorred />
-                  <span className={style.text}>Error occurred please try later</span>
-                </div>
-              ) : (
-                <>
-                  <div className={style.top}>
-                    <h1 className="title">TV Shows</h1>
-                    {!isLoading && (
-                      <button
-                        className="button"
-                        onClick={this.loadShows}
-                        disabled={isShowMoreButtonDisable}
-                      >
-                        {currentPage === 0 ? 'Go back' : 'Next page'}
-                      </button>
-                    )}
-                  </div>
-
-                  {isMoreShows ? <CardItems data={shows} /> : <CardItems data={currentPageItems} />}
-
+  return (
+    <div className="wrapper">
+      <Header handleSearch={handleSearch} value={''} />
+      <main className="main">
+        <div className="container">
+          <ErrorBoundary>
+            {isLoading ? (
+              <p className={style.loading}>Loading...</p>
+            ) : error ? (
+              <div className={style.error}>
+                <MdReportGmailerrorred />
+                <span className={style.text}>Error occurred please try later</span>
+              </div>
+            ) : (
+              <>
+                <div className={style.top}>
+                  <h1 className="title">TV Shows</h1>
                   {!isLoading && (
-                    <div className={style.more}>
-                      <button
-                        className="button"
-                        onClick={this.showMoreShows}
-                        disabled={isShowMoreButtonDisable}
-                      >
-                        {isMoreShows ? 'Show less' : 'Show more'}
-                      </button>
-                    </div>
+                    <button
+                      className="button"
+                      onClick={loadShows}
+                      disabled={isShowMoreButtonDisable}
+                    >
+                      {currentPage === 0 ? 'Go back' : 'Next page'}
+                    </button>
                   )}
-                </>
-              )}
-            </ErrorBoundary>
-          </div>
-        </main>
-      </div>
-    );
-  }
-}
+                </div>
+
+                {isMoreShows ? <CardItems data={shows} /> : <CardItems data={currentPageItems} />}
+
+                {!isLoading && (
+                  <div className={style.more}>
+                    <button
+                      className="button"
+                      onClick={showMoreShows}
+                      disabled={isShowMoreButtonDisable}
+                    >
+                      {isMoreShows ? 'Show less' : 'Show more'}
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+          </ErrorBoundary>
+        </div>
+      </main>
+    </div>
+  );
+};
 
 export default App;
