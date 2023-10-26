@@ -14,6 +14,7 @@ interface AppProps {
   itemsPerPage: number;
   isMoreShows: boolean;
   searchQuery: string;
+  isShowMoreButtonDisable: boolean;
 }
 class App extends React.Component<object, AppProps> {
   constructor(props: AppProps) {
@@ -26,15 +27,18 @@ class App extends React.Component<object, AppProps> {
       itemsPerPage: 20,
       isMoreShows: false,
       searchQuery: '',
+      isShowMoreButtonDisable: false,
     };
 
     this.loadShows = this.loadShows.bind(this);
     this.showMoreShows = this.showMoreShows.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
+    this.enableButton = this.enableButton.bind(this);
   }
 
   async componentDidMount() {
     this.loadShows();
+    this.enableButton();
   }
 
   async loadShows() {
@@ -69,6 +73,16 @@ class App extends React.Component<object, AppProps> {
     }
   }
 
+  enableButton() {
+    const { shows } = this.state;
+
+    if (shows.length > 20) {
+      this.setState({ isShowMoreButtonDisable: true });
+    } else {
+      this.setState({ isShowMoreButtonDisable: false });
+    }
+  }
+
   showMoreShows() {
     this.setState((prevState) => ({
       isMoreShows: !prevState.isMoreShows,
@@ -84,6 +98,12 @@ class App extends React.Component<object, AppProps> {
     this.getSearchChange();
 
     const savedValue = localStorage.getItem('TVShowSearch') || '';
+
+    if (savedValue === '') {
+      this.loadShows();
+      this.enableButton();
+      return;
+    }
 
     try {
       // const response = await fetch(`${URL.SEARCH}${searchQuery}`);
@@ -107,10 +127,20 @@ class App extends React.Component<object, AppProps> {
         error,
       });
     }
+
+    this.enableButton();
   }
 
   render() {
-    const { shows, isLoading, error, currentPage, itemsPerPage, isMoreShows } = this.state;
+    const {
+      shows,
+      isLoading,
+      error,
+      currentPage,
+      itemsPerPage,
+      isMoreShows,
+      isShowMoreButtonDisable,
+    } = this.state;
 
     const currentPageItems = shows.slice(0, itemsPerPage);
 
@@ -131,7 +161,11 @@ class App extends React.Component<object, AppProps> {
                 <div className={style.top}>
                   <h1 className="title">All Shows</h1>
                   {!isLoading && (
-                    <button className="button" onClick={this.loadShows}>
+                    <button
+                      className="button"
+                      onClick={this.loadShows}
+                      disabled={isShowMoreButtonDisable}
+                    >
                       {currentPage === 0 ? 'Go back' : 'Next page'}
                     </button>
                   )}
@@ -141,7 +175,11 @@ class App extends React.Component<object, AppProps> {
 
                 {!isLoading && (
                   <div className={style.more}>
-                    <button className="button" onClick={this.showMoreShows}>
+                    <button
+                      className="button"
+                      onClick={this.showMoreShows}
+                      disabled={isShowMoreButtonDisable}
+                    >
                       {isMoreShows ? 'Show less' : 'Show more'}
                     </button>
                   </div>

@@ -63,6 +63,16 @@ html {
   &:hover {
     background-color: $hoverActiveColor;
   }
+  &:active {
+    opacity: 0.8;
+  }
+  &:disabled {
+    opacity: 0.5;
+    &:hover {
+      background-color: $hoverColor;
+      cursor: default;
+    }
+  }
 }
 
 .title {
