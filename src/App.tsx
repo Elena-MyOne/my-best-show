@@ -13,6 +13,7 @@ interface AppProps {
   currentPage: number;
   itemsPerPage: number;
   isMoreShows: boolean;
+  searchQuery: string;
 }
 class App extends React.Component<object, AppProps> {
   constructor(props: AppProps) {
@@ -24,10 +25,12 @@ class App extends React.Component<object, AppProps> {
       currentPage: 0,
       itemsPerPage: 20,
       isMoreShows: false,
+      searchQuery: '',
     };
 
     this.loadShows = this.loadShows.bind(this);
     this.showMoreShows = this.showMoreShows.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   async componentDidMount() {
@@ -72,6 +75,40 @@ class App extends React.Component<object, AppProps> {
     }));
   }
 
+  getSearchChange() {
+    const savedValue = localStorage.getItem('TVShowSearch') || '';
+    this.setState({ searchQuery: savedValue });
+  }
+
+  async handleSearch() {
+    this.getSearchChange();
+
+    const savedValue = localStorage.getItem('TVShowSearch') || '';
+
+    try {
+      // const response = await fetch(`${URL.SEARCH}${searchQuery}`);
+      const response = await fetch(`${URL.SEARCH}${savedValue}`);
+
+      if (!response.ok) {
+        throw new Error('Network response error');
+      }
+
+      const data: ShowData[] = await response.json();
+
+      this.setState({
+        shows: data,
+        isLoading: false,
+        currentPage: 0,
+      });
+    } catch (error) {
+      this.setState({
+        shows: [],
+        isLoading: false,
+        error,
+      });
+    }
+  }
+
   render() {
     const { shows, isLoading, error, currentPage, itemsPerPage, isMoreShows } = this.state;
 
@@ -79,7 +116,7 @@ class App extends React.Component<object, AppProps> {
 
     return (
       <div className="wrapper">
-        <Header />
+        <Header handleSearch={this.handleSearch} value={''} />
         <main className="main">
           <div className="container">
             {isLoading ? (

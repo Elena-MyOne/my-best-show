@@ -1,6 +1,6 @@
 export interface SearchShowsData {
   score: number;
-  shows: ShowData[];
+  show: ShowData;
 }
 
 export interface ShowData {
@@ -12,7 +12,7 @@ export interface ShowData {
   genres: string[];
   status: string;
   runtime: number;
-  averageRuntime: number;
+  averageRuntime: number | null;
   premiered: string;
   ended: string;
   officialSite: string;

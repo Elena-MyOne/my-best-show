@@ -5,9 +5,10 @@ import { BsSearch } from 'react-icons/bs';
 
 interface HeaderProps {
   value: string;
+  handleSearch(): Promise<void>;
 }
 
-class Header extends React.Component<object, HeaderProps> {
+class Header extends React.Component<HeaderProps, { value: string }> {
   constructor(props: HeaderProps) {
     super(props);
     this.state = {
@@ -30,8 +31,10 @@ class Header extends React.Component<object, HeaderProps> {
 
   handleButtonClick() {
     const { value } = this.state;
+    const { handleSearch } = this.props;
     localStorage.setItem('TVShowSearch', value);
     console.log('click');
+    handleSearch();
   }
 
   render() {

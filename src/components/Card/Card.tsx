@@ -27,11 +27,14 @@ class Card extends React.Component<CardProps> {
           {image && <img src={show.image.medium} alt="cover" />}
 
           <div className={style.top}>
-            <div className={style.rating}>
-              <AiFillStar />
-              <span className={style.average}>{show.rating.average}</span>
-            </div>
-            <div className={style.genres}>{show.genres.join(', ')}</div>
+            {show.rating && (
+              <div className={style.rating}>
+                <AiFillStar />
+                <span className={style.average}>{show.rating.average}</span>
+              </div>
+            )}
+            {show.genres && <div className={style.genres}>{show.genres.join(', ')}</div>}
+
             <div className={style.years}>{years}</div>
           </div>
         </div>
