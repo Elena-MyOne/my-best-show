@@ -1,25 +1,12 @@
 import React from 'react';
-import style from './App.module.scss';
-import Header from './components/Header/Header';
-import CardItems from './components/CardItems/CardItems';
-import { URL } from './models/enums';
+import { ROUTER_PATHS, URL } from './models/enums';
 import { ShowData } from './models/interfaces';
-import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
-import Loader from './components/Loader/Loader';
-import ErrorMessage from './components/ErrorMessage/ErrorMessage';
+import { Route, Routes } from 'react-router-dom';
+import Layout from './components/Layout/Layout';
+import MainPage from './components/pages/MainPage/MainPage';
+import NotFound from './components/pages/NotFound/NotFound';
 
-interface AppProps {
-  shows: ShowData[];
-  isLoading: boolean;
-  error: Error | null | unknown;
-  currentPage: number;
-  itemsPerPage: number;
-  isMoreShows: boolean;
-  searchQuery: string;
-  isShowMoreButtonDisable: boolean;
-}
-
-const App: React.FC<AppProps> = () => {
+const App: React.FC = () => {
   const [shows, setShows] = React.useState<ShowData[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<Error | null | unknown>(null);
@@ -115,49 +102,27 @@ const App: React.FC<AppProps> = () => {
   const currentPageItems = shows.slice(0, itemsPerPage);
 
   return (
-    <div className="wrapper">
-      <Header handleSearch={handleSearch} value={''} />
-      <main className="main">
-        <div className="container">
-          <ErrorBoundary>
-            {isLoading ? (
-              <Loader />
-            ) : error ? (
-              <ErrorMessage />
-            ) : (
-              <>
-                <div className={style.top}>
-                  <h1 className="title">TV Shows</h1>
-                  {!isLoading && (
-                    <button
-                      className="button"
-                      onClick={loadShows}
-                      disabled={isShowMoreButtonDisable}
-                    >
-                      {currentPage === 0 ? 'Go back' : 'Next page'}
-                    </button>
-                  )}
-                </div>
-
-                {isMoreShows ? <CardItems data={shows} /> : <CardItems data={currentPageItems} />}
-
-                {!isLoading && (
-                  <div className={style.more}>
-                    <button
-                      className="button"
-                      onClick={showMoreShows}
-                      disabled={isShowMoreButtonDisable}
-                    >
-                      {isMoreShows ? 'Show less' : 'Show more'}
-                    </button>
-                  </div>
-                )}
-              </>
-            )}
-          </ErrorBoundary>
-        </div>
-      </main>
-    </div>
+    <Routes>
+      <Route path={ROUTER_PATHS.MAIN} element={<Layout handleSearch={handleSearch} />}>
+        <Route
+          index
+          element={
+            <MainPage
+              isLoading={isLoading}
+              error={error}
+              loadShows={loadShows}
+              isShowMoreButtonDisable={isShowMoreButtonDisable}
+              currentPage={currentPage}
+              isMoreShows={isMoreShows}
+              shows={shows}
+              currentPageItems={currentPageItems}
+              showMoreShows={showMoreShows}
+            />
+          }
+        ></Route>
+        <Route path={ROUTER_PATHS.NOTFOUND} element={<NotFound />}></Route>
+      </Route>
+    </Routes>
   );
 };
 

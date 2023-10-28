@@ -1,5 +1,5 @@
 export enum ROUTER_PATHS {
-  HOME = '/',
+  MAIN = '/',
   NOTFOUND = '*',
 }
 
