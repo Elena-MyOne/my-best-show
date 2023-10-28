@@ -21,15 +21,23 @@ const Card: React.FC<CardProps> = ({ show }) => {
   return (
     <div className={style.card}>
       <div className={style.image}>
-        {image && <img src={show.image.medium} alt="cover" />}
+        {image ? (
+          <img src={show.image.medium} alt="cover" />
+        ) : (
+          <div className={style.cover}>My Best TV Show</div>
+        )}
 
         <div className={style.top}>
-          {show.rating && (
-            <div className={style.rating}>
-              <AiFillStar />
-              <span className={style.average}>{show.rating.average}</span>
-            </div>
-          )}
+          <div className={style.rating}>
+            <AiFillStar />
+            {show.rating &&
+              (show.rating.average ? (
+                <span className={style.average}>{show.rating.average}</span>
+              ) : (
+                <span className={style.average}>Not rated</span>
+              ))}
+          </div>
+
           {show.genres && <div className={style.genres}>{show.genres.join(', ')}</div>}
 
           <div className={style.years}>{years}</div>
