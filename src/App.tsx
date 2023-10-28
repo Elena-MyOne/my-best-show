@@ -4,9 +4,9 @@ import Header from './components/Header/Header';
 import CardItems from './components/CardItems/CardItems';
 import { URL } from './models/enums';
 import { ShowData } from './models/interfaces';
-import { MdReportGmailerrorred } from 'react-icons/md';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import Loader from './components/Loader/Loader';
+import ErrorMessage from './components/ErrorMessage/ErrorMessage';
 
 interface AppProps {
   shows: ShowData[];
@@ -123,10 +123,7 @@ const App: React.FC<AppProps> = () => {
             {isLoading ? (
               <Loader />
             ) : error ? (
-              <div className={style.error}>
-                <MdReportGmailerrorred />
-                <span className={style.text}>Error occurred please try later</span>
-              </div>
+              <ErrorMessage />
             ) : (
               <>
                 <div className={style.top}>
