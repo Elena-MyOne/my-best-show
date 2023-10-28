@@ -37,9 +37,7 @@ const Card: React.FC<CardProps> = ({ show }) => {
                 <span className={style.average}>Not rated</span>
               ))}
           </div>
-
           {show.genres && <div className={style.genres}>{show.genres.join(', ')}</div>}
-
           <div className={style.years}>{years}</div>
         </div>
       </div>

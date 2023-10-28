@@ -5,6 +5,7 @@ import Loader from '../../Loader/Loader';
 import ErrorMessage from '../../ErrorMessage/ErrorMessage';
 import CardItems from '../../CardItems/CardItems';
 import { SearchShowsData, ShowData } from '../../../models/interfaces';
+import ShowMoreShowsButton from './ShowMoreShowsButton/ShowMoreShowsButton';
 
 interface MainPageProps {
   isLoading: boolean;
@@ -12,10 +13,8 @@ interface MainPageProps {
   loadShows: () => Promise<void>;
   isShowMoreButtonDisable: boolean;
   currentPage: number;
-  isMoreShows: boolean;
   shows: ShowData[];
   currentPageItems: ShowData[] | SearchShowsData[] | null;
-  showMoreShows: () => void;
 }
 
 const MainPage: React.FC<MainPageProps> = ({
@@ -24,11 +23,15 @@ const MainPage: React.FC<MainPageProps> = ({
   loadShows,
   isShowMoreButtonDisable,
   currentPage,
-  isMoreShows,
   shows,
   currentPageItems,
-  showMoreShows,
 }) => {
+  const [isMoreShows, setIsMoreShows] = React.useState<boolean>(false);
+
+  const showMoreShows = () => {
+    setIsMoreShows((prev) => !prev);
+  };
+
   return (
     <>
       <ErrorBoundary>
@@ -50,15 +53,11 @@ const MainPage: React.FC<MainPageProps> = ({
             {isMoreShows ? <CardItems data={shows} /> : <CardItems data={currentPageItems} />}
 
             {!isLoading && (
-              <div className={style.more}>
-                <button
-                  className="button"
-                  onClick={showMoreShows}
-                  disabled={isShowMoreButtonDisable}
-                >
-                  {isMoreShows ? 'Show less' : 'Show more'}
-                </button>
-              </div>
+              <ShowMoreShowsButton
+                showMoreShows={showMoreShows}
+                isShowMoreButtonDisable={isShowMoreButtonDisable}
+                isMoreShows={isMoreShows}
+              />
             )}
           </>
         )}

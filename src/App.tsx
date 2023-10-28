@@ -12,7 +12,6 @@ const App: React.FC = () => {
   const [error, setError] = React.useState<Error | null | unknown>(null);
   const [currentPage, setCurrentPage] = React.useState(0);
   const [itemsPerPage] = React.useState(20);
-  const [isMoreShows, setIsMoreShows] = React.useState<boolean>(false);
   const [searchQuery, setSearchQuery] = React.useState<string>('');
   const [isShowMoreButtonDisable, setIsShowMoreButtonDisable] = React.useState<boolean>(false);
 
@@ -48,10 +47,6 @@ const App: React.FC = () => {
     } else {
       setIsShowMoreButtonDisable(false);
     }
-  };
-
-  const showMoreShows = () => {
-    setIsMoreShows((prev) => !prev);
   };
 
   const getSearchChange = () => {
@@ -113,10 +108,8 @@ const App: React.FC = () => {
               loadShows={loadShows}
               isShowMoreButtonDisable={isShowMoreButtonDisable}
               currentPage={currentPage}
-              isMoreShows={isMoreShows}
               shows={shows}
               currentPageItems={currentPageItems}
-              showMoreShows={showMoreShows}
             />
           }
         ></Route>
