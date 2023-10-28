@@ -6,6 +6,7 @@ import { URL } from './models/enums';
 import { ShowData } from './models/interfaces';
 import { MdReportGmailerrorred } from 'react-icons/md';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
+import Loader from './components/Loader/Loader';
 
 interface AppProps {
   shows: ShowData[];
@@ -120,7 +121,7 @@ const App: React.FC<AppProps> = () => {
         <div className="container">
           <ErrorBoundary>
             {isLoading ? (
-              <p className={style.loading}>Loading...</p>
+              <Loader />
             ) : error ? (
               <div className={style.error}>
                 <MdReportGmailerrorred />
