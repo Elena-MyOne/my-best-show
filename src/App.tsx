@@ -137,6 +137,7 @@ class App extends React.Component<object, AppProps> {
 
   throwError() {
     this.setState({ isClickedErrorButton: true });
+    console.error('Error information: ', 'The Error boundary button was triggered');
   }
 
   render() {
