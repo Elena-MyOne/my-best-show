@@ -16,6 +16,7 @@ interface AppProps {
   isMoreShows: boolean;
   searchQuery: string;
   isShowMoreButtonDisable: boolean;
+  isClickedErrorButton: boolean;
 }
 class App extends React.Component<object, AppProps> {
   constructor(props: AppProps) {
@@ -29,12 +30,14 @@ class App extends React.Component<object, AppProps> {
       isMoreShows: false,
       searchQuery: '',
       isShowMoreButtonDisable: false,
+      isClickedErrorButton: false,
     };
 
     this.loadShows = this.loadShows.bind(this);
     this.showMoreShows = this.showMoreShows.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.enableButton = this.enableButton.bind(this);
+    this.throwError = this.throwError.bind(this);
   }
 
   async componentDidMount() {
@@ -132,6 +135,10 @@ class App extends React.Component<object, AppProps> {
     this.enableButton();
   }
 
+  throwError() {
+    this.setState({ isClickedErrorButton: true });
+  }
+
   render() {
     const {
       shows,
@@ -141,16 +148,17 @@ class App extends React.Component<object, AppProps> {
       itemsPerPage,
       isMoreShows,
       isShowMoreButtonDisable,
+      isClickedErrorButton,
     } = this.state;
 
     const currentPageItems = shows.slice(0, itemsPerPage);
 
     return (
-      <div className="wrapper">
-        <Header handleSearch={this.handleSearch} value={''} />
-        <main className="main">
-          <div className="container">
-            <ErrorBoundary>
+      <ErrorBoundary isClickedErrorButton={isClickedErrorButton}>
+        <div className="wrapper">
+          <Header handleSearch={this.handleSearch} value={''} />
+          <main className="main">
+            <div className="container">
               {isLoading ? (
                 <p className={style.loading}>Loading...</p>
               ) : error ? (
@@ -163,13 +171,18 @@ class App extends React.Component<object, AppProps> {
                   <div className={style.top}>
                     <h1 className="title">TV Shows</h1>
                     {!isLoading && (
-                      <button
-                        className="button"
-                        onClick={this.loadShows}
-                        disabled={isShowMoreButtonDisable}
-                      >
-                        {currentPage === 0 ? 'Go back' : 'Next page'}
-                      </button>
+                      <div className={style.buttons}>
+                        <button
+                          className="button"
+                          onClick={this.loadShows}
+                          disabled={isShowMoreButtonDisable}
+                        >
+                          {currentPage === 0 ? 'Go back' : 'Next page'}
+                        </button>
+                        <button className={style.boundary} onClick={this.throwError}>
+                          Error Boundary
+                        </button>
+                      </div>
                     )}
                   </div>
 
@@ -188,10 +201,10 @@ class App extends React.Component<object, AppProps> {
                   )}
                 </>
               )}
-            </ErrorBoundary>
-          </div>
-        </main>
-      </div>
+            </div>
+          </main>
+        </div>
+      </ErrorBoundary>
     );
   }
 }

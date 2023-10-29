@@ -35,3 +35,26 @@
   margin-bottom: 40px;
   width: 100%;
 }
+
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.boundary {
+  font-size: 18px;
+  color: $fontColor;
+  font-weight: 300;
+  background-color: $errorColor;
+  cursor: pointer;
+  padding: 5px 20px;
+  border-radius: 20px;
+  transition: $transition;
+  &:hover {
+    background-color: $hoverActiveColor;
+  }
+  &:active {
+    opacity: 0.8;
+  }
+}
