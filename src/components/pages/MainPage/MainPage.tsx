@@ -6,6 +6,7 @@ import ErrorMessage from '../../ErrorMessage/ErrorMessage';
 import CardItems from '../../CardItems/CardItems';
 import { SearchShowsData, ShowData } from '../../../models/interfaces';
 import ShowMoreShowsButton from './ShowMoreShowsButton/ShowMoreShowsButton';
+import Pagination from './Pagination/Pagination';
 
 interface MainPageProps {
   isLoading: boolean;
@@ -44,9 +45,11 @@ const MainPage: React.FC<MainPageProps> = ({
             <div className={style.top}>
               <h1 className="title">TV Shows</h1>
               {!isLoading && (
-                <button className="button" onClick={loadShows} disabled={isShowMoreButtonDisable}>
-                  {currentPage === 0 ? 'Go back' : 'Next page'}
-                </button>
+                <Pagination
+                  loadShows={loadShows}
+                  isShowMoreButtonDisable={isShowMoreButtonDisable}
+                  currentPage={currentPage}
+                />
               )}
             </div>
 
