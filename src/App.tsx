@@ -10,12 +10,15 @@ const App: React.FC = () => {
   const [shows, setShows] = React.useState<ShowData[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<Error | null | unknown>(null);
-  const [currentPage, setCurrentPage] = React.useState(0);
   const [itemsPerPage] = React.useState(20);
   const [searchQuery, setSearchQuery] = React.useState<string>('');
   const [isShowMoreButtonDisable, setIsShowMoreButtonDisable] = React.useState<boolean>(false);
+  const [currentPage, setCurrentPage] = React.useState(0);
 
-  const loadShows = async () => {
+  const [nextPage, setNextPage] = React.useState<number | null>(null);
+  const [prevPage, setPrevPage] = React.useState<number | null>(null);
+
+  const loadShows = async (page: number) => {
     if (isLoading) {
       return;
     }
@@ -23,7 +26,7 @@ const App: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${URL.SHOWS}?page=${currentPage}`);
+      const response = await fetch(`${URL.SHOWS}?page=${page}`);
 
       if (!response.ok) {
         throw new Error('Network response error');
@@ -32,8 +35,9 @@ const App: React.FC = () => {
       const data: ShowData[] = await response.json();
 
       setShows(data);
-      setCurrentPage(currentPage === 8 ? currentPage - 8 : currentPage + 1);
       setIsLoading(false);
+      setNextPage(page + 1);
+      setPrevPage(page > 0 ? page - 1 : null);
     } catch (error) {
       setShows([]);
       setIsLoading(false);
@@ -60,7 +64,7 @@ const App: React.FC = () => {
     const savedValue = localStorage.getItem('TVShowSearch') || '';
 
     if (savedValue === '') {
-      loadShows();
+      loadShows(currentPage);
       enableButton();
       return;
     }
@@ -89,7 +93,7 @@ const App: React.FC = () => {
   };
 
   React.useEffect(() => {
-    loadShows();
+    loadShows(currentPage);
     enableButton();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -110,6 +114,9 @@ const App: React.FC = () => {
               currentPage={currentPage}
               shows={shows}
               currentPageItems={currentPageItems}
+              setCurrentPage={setCurrentPage}
+              prevPage={prevPage}
+              nextPage={nextPage}
             />
           }
         ></Route>
