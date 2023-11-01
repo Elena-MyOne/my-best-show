@@ -22,10 +22,6 @@ const Pagination: React.FC<PaginationProps> = ({
   const [isNextDisabled, setIsNextDisabled] = React.useState(false);
   const [isPrevDisabled, setIsPrevDisabled] = React.useState(false);
 
-  console.log('Curr', currentPage);
-  console.log('Prev', prevPage);
-  console.log('next', prevPage);
-
   const handleNextButton = async () => {
     if (!isShowMoreButtonDisable && nextPage !== null) {
       await loadShows(nextPage);

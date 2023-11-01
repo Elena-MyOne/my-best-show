@@ -93,7 +93,8 @@ const App: React.FC = () => {
   };
 
   React.useEffect(() => {
-    loadShows(currentPage);
+    const savedValue = localStorage.getItem('TVShowSearch') || '';
+    savedValue === '' ? loadShows(currentPage) : handleSearch();
     enableButton();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

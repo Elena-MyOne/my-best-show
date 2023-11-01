@@ -45,9 +45,7 @@ const MainPage: React.FC<MainPageProps> = ({
         <>
           <div className={style.top}>
             <h1 className="title">TV Shows</h1>
-            {isLoading ? (
-              <div></div>
-            ) : (
+            {shows.length < 240 ? null : (
               <Pagination
                 loadShows={loadShows}
                 isShowMoreButtonDisable={isShowMoreButtonDisable}
