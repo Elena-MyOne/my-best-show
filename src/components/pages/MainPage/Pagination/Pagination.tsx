@@ -40,14 +40,11 @@ const Pagination: React.FC<PaginationProps> = ({
     }
   };
 
-  const handleNextCurrent = () => {
-    // setCurrentPage(currentPage === 1 ? 1 : currentPage + 1);
-    // loadShows();
-  };
-
-  const handleLast = () => {
-    // setCurrentPage(LAST_PAGE);
-    // loadShows();
+  const handleLast = async () => {
+    if (!isShowMoreButtonDisable && LAST_PAGE) {
+      await loadShows(LAST_PAGE);
+      setCurrentPage(LAST_PAGE);
+    }
   };
 
   React.useEffect(() => {
@@ -64,7 +61,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <button className={style.current}>{currentPage + 1}</button>
 
       {currentPage < LAST_PAGE && (
-        <button className={style.nextCurrent} onClick={handleNextCurrent}>
+        <button className={style.nextCurrent} onClick={handleNextButton}>
           {currentPage + 2}
         </button>
       )}
