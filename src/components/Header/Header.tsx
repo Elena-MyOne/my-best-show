@@ -2,6 +2,8 @@ import React from 'react';
 import style from './Header.module.scss';
 import { MdLocalMovies } from 'react-icons/md';
 import { BsSearch } from 'react-icons/bs';
+import { ROUTER_PATHS } from '../../models/enums';
+import { Link } from 'react-router-dom';
 
 interface HeaderProps {
   value: string;
@@ -29,11 +31,11 @@ const Header: React.FC<HeaderProps> = ({ handleSearch }) => {
   return (
     <header className={style.header}>
       <div className={`${style.body} container`}>
-        <div className={style.logo}>
+        <Link to={ROUTER_PATHS.MAIN} className={style.logo}>
           <MdLocalMovies />
           <span className={style.text}>Shows</span>
-        </div>
-        <div className={style.search}>
+        </Link>
+        <form className={style.search}>
           <input
             type="text"
             className={style.input}
@@ -44,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({ handleSearch }) => {
           <button className={style.button} onClick={handleButtonClick}>
             <BsSearch />
           </button>
-        </div>
+        </form>
       </div>
     </header>
   );
