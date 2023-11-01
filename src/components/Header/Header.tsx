@@ -28,6 +28,11 @@ const Header: React.FC<HeaderProps> = ({ handleSearch }) => {
     handleSearch();
   };
 
+  const handleSearchForm = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleButtonClick();
+  };
+
   return (
     <header className={style.header}>
       <div className={`${style.body} container`}>
@@ -35,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({ handleSearch }) => {
           <MdLocalMovies />
           <span className={style.text}>Shows</span>
         </Link>
-        <form className={style.search}>
+        <form className={style.search} onSubmit={handleSearchForm}>
           <input
             type="text"
             className={style.input}
