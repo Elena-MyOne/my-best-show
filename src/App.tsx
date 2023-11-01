@@ -70,7 +70,6 @@ const App: React.FC = () => {
     }
 
     try {
-      // const response = await fetch(`${URL.SEARCH}${searchQuery}`);
       console.log(searchQuery);
       const response = await fetch(`${URL.SEARCH}${savedValue}`);
 

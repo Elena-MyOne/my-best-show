@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './Pagination.module.scss';
-import { LAST_PAGE } from '../../../../models/constants';
+import { LAST_PAGE } from '../../../../constants/page.constants';
 
 interface PaginationProps {
   loadShows: (page: number) => Promise<void>;

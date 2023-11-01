@@ -7,6 +7,7 @@ import CardItems from '../../CardItems/CardItems';
 import { SearchShowsData, ShowData } from '../../../models/interfaces';
 import ShowMoreShowsButton from './ShowMoreShowsButton/ShowMoreShowsButton';
 import Pagination from './Pagination/Pagination';
+import { ITEMS_PER_PAGE } from '../../../constants/page.constants';
 
 interface MainPageProps {
   isLoading: boolean;
@@ -45,7 +46,7 @@ const MainPage: React.FC<MainPageProps> = ({
         <>
           <div className={style.top}>
             <h1 className="title">TV Shows</h1>
-            {shows.length < 240 ? null : (
+            {shows.length < ITEMS_PER_PAGE ? null : (
               <Pagination
                 loadShows={loadShows}
                 isShowMoreButtonDisable={isShowMoreButtonDisable}
