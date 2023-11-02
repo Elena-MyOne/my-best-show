@@ -5,6 +5,7 @@ import { ROUTER_PATHS, URL } from '../../../models/enums';
 import { ShowData } from '../../../models/interfaces';
 import { AiFillStar } from 'react-icons/ai';
 import { GoLinkExternal } from 'react-icons/go';
+import Spinner from '../../Spinner/Spinner';
 
 const DetailsPage: React.FC = () => {
   const { id } = useParams();
@@ -80,7 +81,9 @@ const DetailsPage: React.FC = () => {
   return (
     <>
       {isLoading ? (
-        <div className={style.loading}>Loading ... </div>
+        <div className={style.loading}>
+          <Spinner />
+        </div>
       ) : (
         <div className={style.body}>
           <div className={style.details}>
