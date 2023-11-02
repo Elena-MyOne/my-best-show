@@ -9,7 +9,7 @@ export interface ShowData {
   name: string;
   type: string;
   language: string;
-  genres: string[];
+  genres: string[] | null;
   status: string;
   runtime: number;
   averageRuntime: number | null;

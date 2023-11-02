@@ -2,6 +2,7 @@ import React from 'react';
 import { ShowData } from '../../models/interfaces';
 import style from './Card.module.scss';
 import { AiFillStar } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 
 interface CardProps {
   show: ShowData | null;
@@ -19,7 +20,7 @@ const Card: React.FC<CardProps> = ({ show }) => {
   const image = show.image?.medium;
 
   return (
-    <div className={style.card}>
+    <Link to={`/shows/details/${show.id}`} className={style.card}>
       <div className={style.image}>
         {image ? (
           <img src={show.image.medium} alt="cover" />
@@ -42,7 +43,7 @@ const Card: React.FC<CardProps> = ({ show }) => {
         </div>
       </div>
       <h3 className={style.name}>{show.name}</h3>
-    </div>
+    </Link>
   );
 };
 

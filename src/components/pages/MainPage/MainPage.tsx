@@ -8,6 +8,7 @@ import { SearchShowsData, ShowData } from '../../../models/interfaces';
 import ShowMoreShowsButton from './ShowMoreShowsButton/ShowMoreShowsButton';
 import Pagination from './Pagination/Pagination';
 import { ITEMS_PER_PAGE } from '../../../constants/page.constants';
+import { Outlet } from 'react-router-dom';
 
 interface MainPageProps {
   isLoading: boolean;
@@ -45,7 +46,7 @@ const MainPage: React.FC<MainPageProps> = ({
       <ErrorBoundary>
         <>
           <div className={style.top}>
-            <h1 className="title">TV Shows</h1>
+            <h1 className="title">Shows List</h1>
             {shows.length < ITEMS_PER_PAGE ? null : (
               <Pagination
                 loadShows={loadShows}
@@ -64,7 +65,14 @@ const MainPage: React.FC<MainPageProps> = ({
           <ErrorMessage />
         ) : (
           <>
-            {isMoreShows ? <CardItems data={shows} /> : <CardItems data={currentPageItems} />}
+            <div className={style.content}>
+              <div className={style.items}>
+                {isMoreShows ? <CardItems data={shows} /> : <CardItems data={currentPageItems} />}
+              </div>
+              <div className={style.details}>
+                <Outlet />
+              </div>
+            </div>
 
             {!isLoading && (
               <ShowMoreShowsButton
