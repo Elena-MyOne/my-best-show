@@ -39,6 +39,8 @@ const MainPage: React.FC<MainPageProps> = ({
 
   const showMoreShows = () => {
     setIsMoreShows((prev) => !prev);
+    setCurrentPage(0);
+    loadShows(0);
   };
 
   return (
