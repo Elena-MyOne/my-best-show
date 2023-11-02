@@ -46,10 +46,11 @@ const DetailsPage: React.FC = () => {
       const data: ShowData = await response.json();
 
       show.genres = [];
+      const image = data.image?.original || '';
 
       setShow({
         id: data.id,
-        image: data.image.original,
+        image,
         name: data.name,
         rating: data.rating.average,
         language: data.language,
@@ -60,11 +61,9 @@ const DetailsPage: React.FC = () => {
         officialSite: data.officialSite,
       });
 
-      console.log(data);
-
       setIsLoading(false);
     } catch (error) {
-      console.log('error');
+      console.error(error);
       setIsLoading(false);
     }
   };
