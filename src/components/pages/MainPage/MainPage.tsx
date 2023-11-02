@@ -8,7 +8,8 @@ import { SearchShowsData, ShowData } from '../../../models/interfaces';
 import ShowMoreShowsButton from './ShowMoreShowsButton/ShowMoreShowsButton';
 import Pagination from './Pagination/Pagination';
 import { ITEMS_PER_PAGE } from '../../../constants/page.constants';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { ROUTER_PATHS } from '../../../models/enums';
 
 interface MainPageProps {
   isLoading: boolean;
@@ -36,11 +37,23 @@ const MainPage: React.FC<MainPageProps> = ({
   nextPage,
 }) => {
   const [isMoreShows, setIsMoreShows] = React.useState<boolean>(false);
+  const [isCardItemsDarked, setIsCardItemsDarked] = React.useState<boolean>(false);
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const showMoreShows = () => {
     setIsMoreShows((prev) => !prev);
     setCurrentPage(0);
     loadShows(0);
+  };
+
+  const closeDetails = () => {
+    const path = location.pathname;
+    if (path.includes('details')) {
+      navigate(`${ROUTER_PATHS.MAIN}`);
+      setIsCardItemsDarked(false);
+    }
   };
 
   return (
@@ -68,8 +81,20 @@ const MainPage: React.FC<MainPageProps> = ({
         ) : (
           <>
             <div className={style.content}>
-              <div className={style.items}>
-                {isMoreShows ? <CardItems data={shows} /> : <CardItems data={currentPageItems} />}
+              <div className={style.items} onClick={closeDetails}>
+                {isMoreShows ? (
+                  <CardItems
+                    data={shows}
+                    isCardItemsDarked={isCardItemsDarked}
+                    setIsCardItemsDarked={setIsCardItemsDarked}
+                  />
+                ) : (
+                  <CardItems
+                    data={currentPageItems}
+                    isCardItemsDarked={isCardItemsDarked}
+                    setIsCardItemsDarked={setIsCardItemsDarked}
+                  />
+                )}
               </div>
               <div className={style.details}>
                 <Outlet />

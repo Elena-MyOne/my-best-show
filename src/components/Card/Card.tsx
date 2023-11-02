@@ -6,9 +6,10 @@ import { Link } from 'react-router-dom';
 
 interface CardProps {
   show: ShowData | null;
+  setIsCardItemsDarked: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Card: React.FC<CardProps> = ({ show }) => {
+const Card: React.FC<CardProps> = ({ show, setIsCardItemsDarked }) => {
   if (show === null) {
     return <div className={style.error}>No show data available</div>;
   }
@@ -19,8 +20,12 @@ const Card: React.FC<CardProps> = ({ show }) => {
 
   const image = show.image?.medium;
 
+  const setDarkBackground = () => {
+    setIsCardItemsDarked(true);
+  };
+
   return (
-    <Link to={`/shows/details/${show.id}`} className={style.card}>
+    <Link to={`/shows/details/${show.id}`} className={style.card} onClick={setDarkBackground}>
       <div className={style.image}>
         {image ? (
           <img src={show.image.medium} alt="cover" />
