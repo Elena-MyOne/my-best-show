@@ -1,7 +1,7 @@
 import React from 'react';
 import { ROUTER_PATHS, URL } from './models/enums';
 import { ShowData } from './models/interfaces';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import MainPage from './components/pages/MainPage/MainPage';
 import NotFound from './components/pages/NotFound/NotFound';
@@ -17,6 +17,8 @@ const App: React.FC = () => {
 
   const [nextPage, setNextPage] = React.useState<number | null>(null);
   const [prevPage, setPrevPage] = React.useState<number | null>(null);
+
+  const navigate = useNavigate();
 
   const loadShows = async (page: number) => {
     if (isLoading) {
@@ -38,6 +40,8 @@ const App: React.FC = () => {
       setIsLoading(false);
       setNextPage(page + 1);
       setPrevPage(page > 0 ? page - 1 : null);
+
+      navigate(`/${ROUTER_PATHS.SHOWS}?page=${encodeURIComponent(page)}`);
     } catch (error) {
       setShows([]);
       setIsLoading(false);
@@ -82,6 +86,8 @@ const App: React.FC = () => {
       setShows(data);
       setIsLoading(false);
       setCurrentPage(0);
+
+      navigate(`/${ROUTER_PATHS.SEARCH}?q=${encodeURIComponent(savedValue)}`);
     } catch (error) {
       setShows([]);
       setIsLoading(false);
@@ -100,26 +106,25 @@ const App: React.FC = () => {
 
   const currentPageItems = shows.slice(0, itemsPerPage);
 
+  const getMainPageProps = () => ({
+    isLoading,
+    error,
+    loadShows,
+    isShowMoreButtonDisable,
+    currentPage,
+    shows,
+    currentPageItems,
+    setCurrentPage,
+    prevPage,
+    nextPage,
+  });
+
   return (
     <Routes>
       <Route path={ROUTER_PATHS.MAIN} element={<Layout handleSearch={handleSearch} />}>
-        <Route
-          index
-          element={
-            <MainPage
-              isLoading={isLoading}
-              error={error}
-              loadShows={loadShows}
-              isShowMoreButtonDisable={isShowMoreButtonDisable}
-              currentPage={currentPage}
-              shows={shows}
-              currentPageItems={currentPageItems}
-              setCurrentPage={setCurrentPage}
-              prevPage={prevPage}
-              nextPage={nextPage}
-            />
-          }
-        ></Route>
+        <Route index element={<MainPage {...getMainPageProps()} />}></Route>
+        <Route path={ROUTER_PATHS.SHOWS} element={<MainPage {...getMainPageProps()} />}></Route>
+        <Route path={ROUTER_PATHS.SEARCH} element={<MainPage {...getMainPageProps()} />}></Route>
         <Route path={ROUTER_PATHS.NOTFOUND} element={<NotFound />}></Route>
       </Route>
     </Routes>
