@@ -7,12 +7,19 @@ import { AiFillStar } from 'react-icons/ai';
 import { GoLinkExternal } from 'react-icons/go';
 import Spinner from '../../Spinner/Spinner';
 
-const DetailsPage: React.FC = () => {
+interface DetailsPageProps {
+  setIsCardItemsDarked: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const DetailsPage: React.FC<DetailsPageProps> = ({ setIsCardItemsDarked }) => {
   const { id } = useParams();
 
   const navigate = useNavigate();
 
-  const goBack = () => navigate(`${ROUTER_PATHS.MAIN}`);
+  const goBack = () => {
+    navigate(`${ROUTER_PATHS.MAIN}`);
+    setIsCardItemsDarked(false);
+  };
 
   const noDate = 'no data to show';
 

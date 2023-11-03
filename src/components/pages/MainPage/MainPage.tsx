@@ -22,6 +22,8 @@ interface MainPageProps {
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   prevPage: number | null;
   nextPage: number | null;
+  isCardItemsDarked: boolean;
+  setIsCardItemsDarked: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const MainPage: React.FC<MainPageProps> = ({
@@ -35,9 +37,10 @@ const MainPage: React.FC<MainPageProps> = ({
   setCurrentPage,
   prevPage,
   nextPage,
+  isCardItemsDarked,
+  setIsCardItemsDarked,
 }) => {
   const [isMoreShows, setIsMoreShows] = React.useState<boolean>(false);
-  const [isCardItemsDarked, setIsCardItemsDarked] = React.useState<boolean>(false);
 
   const navigate = useNavigate();
   const location = useLocation();

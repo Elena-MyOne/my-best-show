@@ -15,9 +15,9 @@ const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = React.useState<string>('');
   const [isShowMoreButtonDisable, setIsShowMoreButtonDisable] = React.useState<boolean>(false);
   const [currentPage, setCurrentPage] = React.useState(0);
-
   const [nextPage, setNextPage] = React.useState<number | null>(null);
   const [prevPage, setPrevPage] = React.useState<number | null>(null);
+  const [isCardItemsDarked, setIsCardItemsDarked] = React.useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -118,6 +118,8 @@ const App: React.FC = () => {
     setCurrentPage,
     prevPage,
     nextPage,
+    isCardItemsDarked,
+    setIsCardItemsDarked,
   });
 
   return (
@@ -125,7 +127,10 @@ const App: React.FC = () => {
       <Route path={ROUTER_PATHS.MAIN} element={<Layout handleSearch={handleSearch} />}>
         <Route index element={<MainPage {...getMainPageProps()} />}></Route>
         <Route path={ROUTER_PATHS.SHOWS} element={<MainPage {...getMainPageProps()} />}>
-          <Route path={ROUTER_PATHS.DETAILS} element={<DetailsPage />} />
+          <Route
+            path={ROUTER_PATHS.DETAILS}
+            element={<DetailsPage setIsCardItemsDarked={setIsCardItemsDarked} />}
+          />
         </Route>
         <Route path={ROUTER_PATHS.SEARCH} element={<MainPage {...getMainPageProps()} />}></Route>
         <Route path={ROUTER_PATHS.NOTFOUND} element={<NotFound />}></Route>
