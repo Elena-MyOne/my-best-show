@@ -6,6 +6,7 @@ import Layout from './components/Layout/Layout';
 import MainPage from './components/pages/MainPage/MainPage';
 import NotFound from './components/pages/NotFound/NotFound';
 import DetailsPage from './components/pages/DetailsPage/DetailsPage';
+import { AppContext } from './Contexts/AppContext';
 
 const App: React.FC = () => {
   const [shows, setShows] = React.useState<ShowData[]>([]);
@@ -114,19 +115,21 @@ const App: React.FC = () => {
   });
 
   return (
-    <Routes>
-      <Route path={ROUTER_PATHS.MAIN} element={<Layout handleSearch={handleSearch} />}>
-        <Route index element={<MainPage {...getMainPageProps()} />}></Route>
-        <Route path={ROUTER_PATHS.SHOWS} element={<MainPage {...getMainPageProps()} />}>
-          <Route
-            path={ROUTER_PATHS.DETAILS}
-            element={<DetailsPage setIsCardItemsDarked={setIsCardItemsDarked} />}
-          />
+    <AppContext.Provider value={{ handleSearch }}>
+      <Routes>
+        <Route path={ROUTER_PATHS.MAIN} element={<Layout />}>
+          <Route index element={<MainPage {...getMainPageProps()} />}></Route>
+          <Route path={ROUTER_PATHS.SHOWS} element={<MainPage {...getMainPageProps()} />}>
+            <Route
+              path={ROUTER_PATHS.DETAILS}
+              element={<DetailsPage setIsCardItemsDarked={setIsCardItemsDarked} />}
+            />
+          </Route>
+          <Route path={ROUTER_PATHS.SEARCH} element={<MainPage {...getMainPageProps()} />}></Route>
+          <Route path={ROUTER_PATHS.NOTFOUND} element={<NotFound />}></Route>
         </Route>
-        <Route path={ROUTER_PATHS.SEARCH} element={<MainPage {...getMainPageProps()} />}></Route>
-        <Route path={ROUTER_PATHS.NOTFOUND} element={<NotFound />}></Route>
-      </Route>
-    </Routes>
+      </Routes>
+    </AppContext.Provider>
   );
 };
 

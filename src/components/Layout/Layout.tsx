@@ -2,14 +2,10 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from '../Header/Header';
 
-interface LayoutProps {
-  handleSearch: () => Promise<void>;
-}
-
-const Layout: React.FC<LayoutProps> = ({ handleSearch }) => {
+const Layout: React.FC = () => {
   return (
     <div className="wrapper">
-      <Header handleSearch={handleSearch} value={''} />
+      <Header />
       <main className="main">
         <div className="container">
           <Outlet />

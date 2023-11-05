@@ -1,16 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import style from './Header.module.scss';
 import { MdLocalMovies } from 'react-icons/md';
 import { BsSearch } from 'react-icons/bs';
 import { ROUTER_PATHS } from '../../models/enums';
 import { Link } from 'react-router-dom';
+import { AppContext } from '../../Contexts/AppContext';
 
-interface HeaderProps {
-  value: string;
-  handleSearch(): Promise<void>;
-}
+const Header: React.FC = () => {
+  const { handleSearch } = useContext(AppContext);
 
-const Header: React.FC<HeaderProps> = ({ handleSearch }) => {
   const [value, setValue] = React.useState<string>('');
 
   React.useEffect(() => {
@@ -25,7 +23,9 @@ const Header: React.FC<HeaderProps> = ({ handleSearch }) => {
 
   const handleButtonClick = () => {
     localStorage.setItem('TVShowSearch', value);
-    handleSearch();
+    if (handleSearch) {
+      handleSearch();
+    }
   };
 
   const handleSearchForm = (e: React.FormEvent) => {
