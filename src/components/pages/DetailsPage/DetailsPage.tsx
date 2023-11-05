@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import style from './DetailsPage.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ROUTER_PATHS, URL } from '../../../models/enums';
@@ -6,19 +6,20 @@ import { ShowData } from '../../../models/interfaces';
 import { AiFillStar } from 'react-icons/ai';
 import { GoLinkExternal } from 'react-icons/go';
 import Spinner from '../../Spinner/Spinner';
+import { AppContext } from '../../../Contexts/AppContext';
 
-interface DetailsPageProps {
-  setIsCardItemsDarked: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const DetailsPage: React.FC<DetailsPageProps> = ({ setIsCardItemsDarked }) => {
+const DetailsPage: React.FC = () => {
   const { id } = useParams();
 
   const navigate = useNavigate();
 
+  const { setIsCardItemsDarked } = useContext(AppContext);
+
   const goBack = () => {
     navigate(`${ROUTER_PATHS.MAIN}`);
-    setIsCardItemsDarked(false);
+    if (setIsCardItemsDarked) {
+      setIsCardItemsDarked(false);
+    }
   };
 
   const noDate = 'no data to show';

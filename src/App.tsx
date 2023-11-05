@@ -115,15 +115,28 @@ const App: React.FC = () => {
   });
 
   return (
-    <AppContext.Provider value={{ handleSearch }}>
+    <AppContext.Provider
+      value={{
+        handleSearch,
+        isLoading,
+        error,
+        loadShows,
+        isShowMoreButtonDisable,
+        currentPage,
+        shows,
+        currentPageItems,
+        setCurrentPage,
+        prevPage,
+        nextPage,
+        isCardItemsDarked,
+        setIsCardItemsDarked,
+      }}
+    >
       <Routes>
         <Route path={ROUTER_PATHS.MAIN} element={<Layout />}>
           <Route index element={<MainPage {...getMainPageProps()} />}></Route>
           <Route path={ROUTER_PATHS.SHOWS} element={<MainPage {...getMainPageProps()} />}>
-            <Route
-              path={ROUTER_PATHS.DETAILS}
-              element={<DetailsPage setIsCardItemsDarked={setIsCardItemsDarked} />}
-            />
+            <Route path={ROUTER_PATHS.DETAILS} element={<DetailsPage />} />
           </Route>
           <Route path={ROUTER_PATHS.SEARCH} element={<MainPage {...getMainPageProps()} />}></Route>
           <Route path={ROUTER_PATHS.NOTFOUND} element={<NotFound />}></Route>
