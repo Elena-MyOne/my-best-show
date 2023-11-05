@@ -12,7 +12,6 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<Error | null | unknown>(null);
   const [itemsPerPage] = React.useState(20);
-  const [searchQuery, setSearchQuery] = React.useState<string>('');
   const [isShowMoreButtonDisable, setIsShowMoreButtonDisable] = React.useState<boolean>(false);
   const [currentPage, setCurrentPage] = React.useState(0);
   const [nextPage, setNextPage] = React.useState<number | null>(null);
@@ -58,14 +57,7 @@ const App: React.FC = () => {
     }
   };
 
-  const getSearchChange = () => {
-    const savedValue = localStorage.getItem('TVShowSearch') || '';
-    setSearchQuery(savedValue);
-  };
-
   const handleSearch = async () => {
-    getSearchChange();
-
     const savedValue = localStorage.getItem('TVShowSearch') || '';
 
     if (savedValue === '') {
@@ -75,7 +67,6 @@ const App: React.FC = () => {
     }
 
     try {
-      console.log(searchQuery);
       const response = await fetch(`${URL.SEARCH}${savedValue}`);
 
       if (!response.ok) {
