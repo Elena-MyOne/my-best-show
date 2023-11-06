@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { SearchShowsData, ShowData } from '../models/interfaces';
+import { ShowData } from '../models/interfaces';
 
 export type AppStateType = {
   handleSearch(): Promise<void>;
@@ -9,7 +9,7 @@ export type AppStateType = {
   isShowMoreButtonDisable: boolean;
   currentPage: number;
   shows: ShowData[];
-  currentPageItems: ShowData[] | SearchShowsData[] | null;
+  currentPageItems: ShowData[];
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   prevPage: number | null;
   nextPage: number | null;

@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { ShowData } from '../../models/interfaces';
 import style from './Card.module.scss';
 import { AiFillStar } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
+import { AppContext } from '../../Contexts/AppContext';
 
 interface CardProps {
   show: ShowData | null;
-  setIsCardItemsDarked: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Card: React.FC<CardProps> = ({ show, setIsCardItemsDarked }) => {
+const Card: React.FC<CardProps> = ({ show }) => {
+  const { setIsCardItemsDarked } = useContext(AppContext);
+
   if (show === null) {
     return <div className={style.error}>No show data available</div>;
   }
@@ -21,7 +23,7 @@ const Card: React.FC<CardProps> = ({ show, setIsCardItemsDarked }) => {
   const image = show.image?.medium;
 
   const setDarkBackground = () => {
-    setIsCardItemsDarked(true);
+    if (setIsCardItemsDarked) setIsCardItemsDarked(true);
   };
 
   return (

@@ -99,20 +99,20 @@ const App: React.FC = () => {
 
   const currentPageItems = shows.slice(0, itemsPerPage);
 
-  const getMainPageProps = () => ({
-    isLoading,
-    error,
-    loadShows,
-    isShowMoreButtonDisable,
-    currentPage,
-    shows,
-    currentPageItems,
-    setCurrentPage,
-    prevPage,
-    nextPage,
-    isCardItemsDarked,
-    setIsCardItemsDarked,
-  });
+  // const getMainPageProps = () => ({
+  //   isLoading,
+  //   error,
+  //   loadShows,
+  //   isShowMoreButtonDisable,
+  //   currentPage,
+  //   shows,
+  //   currentPageItems,
+  //   setCurrentPage,
+  //   prevPage,
+  //   nextPage,
+  //   isCardItemsDarked,
+  //   setIsCardItemsDarked,
+  // });
 
   return (
     <AppContext.Provider
@@ -134,11 +134,11 @@ const App: React.FC = () => {
     >
       <Routes>
         <Route path={ROUTER_PATHS.MAIN} element={<Layout />}>
-          <Route index element={<MainPage {...getMainPageProps()} />}></Route>
-          <Route path={ROUTER_PATHS.SHOWS} element={<MainPage {...getMainPageProps()} />}>
+          <Route index element={<MainPage />}></Route>
+          <Route path={ROUTER_PATHS.SHOWS} element={<MainPage />}>
             <Route path={ROUTER_PATHS.DETAILS} element={<DetailsPage />} />
           </Route>
-          <Route path={ROUTER_PATHS.SEARCH} element={<MainPage {...getMainPageProps()} />}></Route>
+          <Route path={ROUTER_PATHS.SEARCH} element={<MainPage />}></Route>
           <Route path={ROUTER_PATHS.NOTFOUND} element={<NotFound />}></Route>
         </Route>
       </Routes>
