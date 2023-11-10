@@ -8,6 +8,7 @@ module.exports = {
     'plugin:react/recommended',
     'prettier',
     'plugin:prettier/recommended',
+    'plugin:react/jsx-runtime',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
@@ -28,8 +29,6 @@ module.exports = {
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/no-var-requires': 'off',
-    'react/jsx-uses-react': 'off',
-    'react/react-in-jsx-scope': 'off',
   },
   parserOptions: {
     ecmaFeatures: {

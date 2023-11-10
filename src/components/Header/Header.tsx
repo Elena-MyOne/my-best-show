@@ -40,7 +40,7 @@ const Header: React.FC = () => {
           <MdLocalMovies />
           <span className={style.text}>Shows</span>
         </Link>
-        <form className={style.search} onSubmit={handleSearchForm}>
+        <form className={style.search} onSubmit={handleSearchForm} data-testid="search-form">
           <input
             type="text"
             className={style.input}
