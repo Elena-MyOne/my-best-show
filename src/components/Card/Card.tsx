@@ -10,8 +10,6 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ show, setIsCardItemsDarked }) => {
-  // const { setIsCardItemsDarked } = useContext(AppContext);
-
   if (show === null) {
     return <div className={style.error}>No show data available</div>;
   }

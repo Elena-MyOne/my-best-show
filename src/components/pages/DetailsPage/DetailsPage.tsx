@@ -93,7 +93,7 @@ const DetailsPage: React.FC = () => {
           <Spinner />
         </div>
       ) : (
-        <div className={style.body}>
+        <div className={style.body} data-testid="details">
           <div className={style.details}>
             <div className={style.image}>
               {show.image ? (
