@@ -27,14 +27,10 @@ describe('Card Items rendering', () => {
 
   it('render cards and verify component has the specified number of cards', async () => {
     const cards = await waitFor(() => screen.getAllByTestId('card'));
-    const showNameOne = screen.getByText(/Under the Dome/i);
-    expect(showNameOne).toBeInTheDocument();
 
-    const showNameTwo = screen.getByText(/Person of Interest/i);
-    expect(showNameTwo).toBeInTheDocument();
-
-    const showNameThree = screen.getByText(/Bitten/i);
-    expect(showNameThree).toBeInTheDocument();
+    expect(screen.getByText(/Under the Dome/i)).toBeInTheDocument();
+    expect(screen.getByText(/Person of Interest/i)).toBeInTheDocument();
+    expect(screen.getByText(/Bitten/i)).toBeInTheDocument();
 
     expect(cards.length).toBe(3);
   });

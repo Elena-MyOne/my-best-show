@@ -89,12 +89,12 @@ const DetailsPage: React.FC = () => {
   return (
     <>
       {isLoading ? (
-        <div className={style.loading}>
+        <div className={style.loading} data-testid="spinner">
           <Spinner />
         </div>
       ) : (
         <div className={style.body} data-testid="details">
-          <div className={style.details}>
+          <div className={style.details} data-testid="details-image">
             <div className={style.image}>
               {show.image ? (
                 <img src={show.image} alt="cover" />
@@ -103,8 +103,10 @@ const DetailsPage: React.FC = () => {
               )}
             </div>
             <div className={style.info}>
-              <div className={style.name}>{show.name}</div>
-              <div className={style.rating}>
+              <div className={style.name} data-testid="details-name">
+                {show.name}
+              </div>
+              <div className={style.rating} data-testid="details-rating">
                 <AiFillStar />
                 {show.rating ? (
                   <span className={style.average}>{show.rating}</span>
@@ -123,7 +125,7 @@ const DetailsPage: React.FC = () => {
               )}
             </div>
           </div>
-          <div className={style.summary}>
+          <div className={style.summary} data-testid="details-summary">
             <div dangerouslySetInnerHTML={{ __html: show.summary }} />
           </div>
           <button className="button" onClick={goBack}>
