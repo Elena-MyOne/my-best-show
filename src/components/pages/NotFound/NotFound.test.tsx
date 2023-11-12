@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import NotFound from './NotFound';
 import { BrowserRouter } from 'react-router-dom';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 
 const MockNotFound = () => {
   return (
@@ -19,5 +19,14 @@ describe('404 Page component', () => {
 
     const buttonElement = screen.getByRole('button');
     expect(buttonElement).toBeInTheDocument();
+  });
+
+  it('should go back on button click', async () => {
+    render(<MockNotFound />);
+    const goBack = vi.fn();
+    const buttonElement = screen.getByRole('button');
+    goBack.mockImplementation(() => {});
+    fireEvent.click(buttonElement, new MouseEvent('click', { bubbles: true }));
+    expect(window.location.hash).toBe('');
   });
 });

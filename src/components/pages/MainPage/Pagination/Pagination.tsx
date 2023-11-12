@@ -70,7 +70,12 @@ const Pagination: React.FC = () => {
         </button>
       )}
 
-      <button className={style.next} disabled={isNextDisabled} onClick={handleNextButton}>
+      <button
+        className={style.next}
+        disabled={isNextDisabled}
+        onClick={handleNextButton}
+        data-testid="next"
+      >
         next
       </button>
     </div>
