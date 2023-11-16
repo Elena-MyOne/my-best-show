@@ -1,31 +1,27 @@
 import React, { useContext } from 'react';
 import style from './Header.module.scss';
+import { useSelector, useDispatch } from 'react-redux';
 import { MdLocalMovies } from 'react-icons/md';
 import { BsSearch } from 'react-icons/bs';
 import { ROUTER_PATHS } from '../../models/enums';
 import { Link } from 'react-router-dom';
 import { AppContext } from '../../Contexts/AppContext';
+import { selectSearch, setSearchValue } from '../../redux/slices/SearchSlice';
 
 const Header: React.FC = () => {
   const { handleSearch } = useContext(AppContext);
 
-  const [value, setValue] = React.useState<string>('');
-
-  React.useEffect(() => {
-    const savedValue = localStorage.getItem('TVShowSearch') || '';
-    setValue(savedValue);
-  }, []);
+  const { searchValue } = useSelector(selectSearch);
+  const dispatch = useDispatch();
 
   const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
     const target = event.currentTarget.value;
-    setValue(target);
+    dispatch(setSearchValue(target));
   };
 
   const handleButtonClick = () => {
-    localStorage.setItem('TVShowSearch', value);
-    if (handleSearch) {
-      handleSearch();
-    }
+    localStorage.setItem('TVShowSearch', searchValue);
+    handleSearch && handleSearch();
   };
 
   const handleSearchForm = (event: React.FormEvent) => {
@@ -46,7 +42,7 @@ const Header: React.FC = () => {
             className={style.input}
             placeholder="Search show..."
             onChange={handleChange}
-            value={value}
+            value={searchValue}
           />
           <button className={style.button} onClick={handleButtonClick}>
             <BsSearch />
