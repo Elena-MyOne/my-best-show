@@ -16,8 +16,8 @@ const Header: React.FC = () => {
     setValue(savedValue);
   }, []);
 
-  const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
-    const target = e.currentTarget.value;
+  const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const target = event.currentTarget.value;
     setValue(target);
   };
 
@@ -28,8 +28,8 @@ const Header: React.FC = () => {
     }
   };
 
-  const handleSearchForm = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSearchForm = (event: React.FormEvent) => {
+    event.preventDefault();
     handleButtonClick();
   };
 
