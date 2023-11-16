@@ -46,13 +46,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const enableButton = () => {
-    if (shows.length >= 20) {
-      setIsShowMoreButtonDisable(true);
-    } else {
-      setIsShowMoreButtonDisable(false);
-    }
-  };
+  const enableButton = () => setIsShowMoreButtonDisable(shows.length >= 20);
 
   const handleSearch = async () => {
     const savedValue = localStorage.getItem('TVShowSearch') || '';
@@ -75,7 +69,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       setShows(data);
       setIsLoading(false);
       setCurrentPage(0);
-
       navigate(`/${ROUTER_PATHS.SEARCH}?q=${encodeURIComponent(savedValue)}`);
     } catch (error) {
       setShows([]);
