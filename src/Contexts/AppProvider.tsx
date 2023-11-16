@@ -51,7 +51,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const handleSearch = async () => {
     const savedValue = localStorage.getItem('TVShowSearch') || '';
 
-    if (savedValue === '') {
+    if (!savedValue) {
       await loadShows(currentPage);
       enableButton();
       return;
@@ -81,7 +81,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     const savedValue = localStorage.getItem('TVShowSearch') || '';
-    savedValue === '' ? loadShows(currentPage) : handleSearch();
+    !savedValue ? loadShows(currentPage) : handleSearch();
     enableButton();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
