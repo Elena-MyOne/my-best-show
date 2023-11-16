@@ -4,6 +4,7 @@ import style from './ErrorBoundary.module.scss';
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
+  isClickedErrorButton: boolean;
 }
 
 interface Props {
@@ -24,8 +25,9 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, Props> {
 
   render() {
     const { hasError } = this.state;
+    const { isClickedErrorButton } = this.props;
 
-    if (hasError) {
+    if (hasError || isClickedErrorButton) {
       return (
         <div className={style.error}>
           <BiError />
