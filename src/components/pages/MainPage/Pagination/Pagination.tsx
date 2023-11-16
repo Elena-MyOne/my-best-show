@@ -9,7 +9,7 @@ const Pagination: React.FC = () => {
 
   const {
     loadShows,
-    isShowMoreButtonDisable,
+    switchMoreShows,
     currentPage = 0,
     setCurrentPage,
     prevPage,
@@ -17,7 +17,7 @@ const Pagination: React.FC = () => {
   } = useContext(AppContext);
 
   const handleNextButton = async () => {
-    if (!isShowMoreButtonDisable && nextPage !== null) {
+    if (!switchMoreShows && nextPage !== null) {
       if (loadShows && nextPage && setCurrentPage) {
         await loadShows(nextPage);
         setCurrentPage(nextPage);
@@ -26,27 +26,31 @@ const Pagination: React.FC = () => {
   };
 
   const handlePrevButton = async () => {
-    if (!isShowMoreButtonDisable && prevPage !== null) {
-      if (loadShows && setCurrentPage && prevPage) {
-        await loadShows(prevPage);
-        setCurrentPage(prevPage);
+    if (!switchMoreShows && prevPage !== null && prevPage != undefined) {
+      try {
+        await loadShows?.(prevPage);
+        setCurrentPage?.(prevPage ?? 0);
+      } catch (error) {
+        console.error('Error loading previous page:', error);
       }
     }
   };
 
   const handleLast = async () => {
-    if (!isShowMoreButtonDisable && LAST_PAGE) {
-      if (loadShows && setCurrentPage) {
-        await loadShows(LAST_PAGE);
-        setCurrentPage(LAST_PAGE);
+    if (!switchMoreShows && LAST_PAGE) {
+      try {
+        await loadShows?.(LAST_PAGE);
+        setCurrentPage?.(LAST_PAGE ?? 0);
+      } catch (error) {
+        console.error('Error loading last page:', error);
       }
     }
   };
 
   React.useEffect(() => {
-    setIsNextDisabled(isShowMoreButtonDisable || nextPage === null);
-    setIsPrevDisabled(isShowMoreButtonDisable || prevPage === null);
-  }, [isShowMoreButtonDisable, nextPage, prevPage]);
+    setIsNextDisabled(switchMoreShows || nextPage === null || currentPage >= LAST_PAGE);
+    setIsPrevDisabled(switchMoreShows || prevPage === null || currentPage === 0);
+  }, [switchMoreShows, nextPage, prevPage, currentPage]);
 
   return (
     <div className={style.buttons}>

@@ -11,10 +11,10 @@ const ShowMoreShowsButton: React.FC<ShowMoreShowsButtonProps> = ({
   showMoreShows,
   isMoreShows,
 }) => {
-  const { isShowMoreButtonDisable } = useContext(AppContext);
+  const { switchMoreShows } = useContext(AppContext);
   return (
     <div className={style.more}>
-      <button className="button" onClick={showMoreShows} disabled={isShowMoreButtonDisable}>
+      <button className="button" onClick={showMoreShows} disabled={switchMoreShows}>
         {isMoreShows ? 'Show less' : 'Show more'}
       </button>
     </div>

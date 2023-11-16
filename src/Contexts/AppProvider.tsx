@@ -9,7 +9,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<Error | null | unknown>(null);
   const [itemsPerPage] = React.useState(20);
-  const [isShowMoreButtonDisable, setIsShowMoreButtonDisable] = React.useState<boolean>(false);
+  const [switchMoreShows, setSwitchMoreShows] = React.useState<boolean>(false);
   const [currentPage, setCurrentPage] = React.useState(0);
   const [nextPage, setNextPage] = React.useState<number | null>(null);
   const [prevPage, setPrevPage] = React.useState<number | null>(null);
@@ -46,13 +46,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const enableButton = () => setIsShowMoreButtonDisable(shows.length >= 20);
+  const enableButton = () => setSwitchMoreShows(shows.length >= 20);
 
   const handleSearch = async () => {
     const savedValue = localStorage.getItem('TVShowSearch') || '';
 
     if (savedValue === '') {
-      loadShows(currentPage);
+      await loadShows(currentPage);
       enableButton();
       return;
     }
@@ -95,7 +95,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         isLoading,
         error,
         loadShows,
-        isShowMoreButtonDisable,
+        switchMoreShows,
         currentPage,
         shows,
         currentPageItems,

@@ -6,7 +6,7 @@ export type AppStateType = {
   isLoading: boolean;
   error: Error | null | unknown;
   loadShows: (page: number) => Promise<void>;
-  isShowMoreButtonDisable: boolean;
+  switchMoreShows: boolean;
   currentPage: number;
   shows: ShowData[];
   currentPageItems: ShowData[];
