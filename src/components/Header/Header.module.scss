@@ -19,6 +19,13 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  transition: $transition;
+  &:hover {
+    color: $hoverActiveColor;
+  }
+  &:active {
+    opacity: 0.8;
+  }
 }
 
 .text {

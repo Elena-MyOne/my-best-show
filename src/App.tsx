@@ -1,61 +1,35 @@
 import React from 'react';
-import style from './App.module.scss';
-import Header from './components/Header/Header';
-import CardItems from './components/CardItems/CardItems';
-import { URL } from './models/enums';
+import { ROUTER_PATHS, URL } from './models/enums';
 import { ShowData } from './models/interfaces';
-import { MdReportGmailerrorred } from 'react-icons/md';
-import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import Layout from './components/Layout/Layout';
+import MainPage from './components/pages/MainPage/MainPage';
+import NotFound from './components/pages/NotFound/NotFound';
+import DetailsPage from './components/pages/DetailsPage/DetailsPage';
 
-interface AppProps {
-  shows: ShowData[];
-  isLoading: boolean;
-  error: Error | null | unknown;
-  currentPage: number;
-  itemsPerPage: number;
-  isMoreShows: boolean;
-  searchQuery: string;
-  isShowMoreButtonDisable: boolean;
-  isClickedErrorButton: boolean;
-}
-class App extends React.Component<object, AppProps> {
-  constructor(props: AppProps) {
-    super(props);
-    this.state = {
-      shows: [],
-      isLoading: false,
-      error: null,
-      currentPage: 0,
-      itemsPerPage: 20,
-      isMoreShows: false,
-      searchQuery: '',
-      isShowMoreButtonDisable: false,
-      isClickedErrorButton: false,
-    };
+const App: React.FC = () => {
+  const [shows, setShows] = React.useState<ShowData[]>([]);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<Error | null | unknown>(null);
+  const [itemsPerPage] = React.useState(20);
+  const [searchQuery, setSearchQuery] = React.useState<string>('');
+  const [isShowMoreButtonDisable, setIsShowMoreButtonDisable] = React.useState<boolean>(false);
+  const [currentPage, setCurrentPage] = React.useState(0);
+  const [nextPage, setNextPage] = React.useState<number | null>(null);
+  const [prevPage, setPrevPage] = React.useState<number | null>(null);
+  const [isCardItemsDarked, setIsCardItemsDarked] = React.useState<boolean>(false);
 
-    this.loadShows = this.loadShows.bind(this);
-    this.showMoreShows = this.showMoreShows.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
-    this.enableButton = this.enableButton.bind(this);
-    this.throwError = this.throwError.bind(this);
-  }
+  const navigate = useNavigate();
 
-  async componentDidMount() {
-    this.loadShows();
-    this.enableButton();
-  }
-
-  async loadShows() {
-    const { currentPage, isLoading } = this.state;
-
+  const loadShows = async (page: number) => {
     if (isLoading) {
       return;
     }
 
-    this.setState({ isLoading: true });
+    setIsLoading(true);
 
     try {
-      const response = await fetch(`${URL.SHOWS}?page=${currentPage}`);
+      const response = await fetch(`${URL.SHOWS}?page=${page}`);
 
       if (!response.ok) {
         throw new Error('Network response error');
@@ -63,54 +37,45 @@ class App extends React.Component<object, AppProps> {
 
       const data: ShowData[] = await response.json();
 
-      this.setState({
-        shows: data,
-        currentPage: currentPage === 8 ? currentPage - 8 : currentPage + 1,
-        isLoading: false,
-      });
+      setShows(data);
+      setIsLoading(false);
+      setNextPage(page + 1);
+      setPrevPage(page > 0 ? page - 1 : null);
+
+      navigate(`/${ROUTER_PATHS.SHOWS}?page=${encodeURIComponent(page)}`);
     } catch (error) {
-      this.setState({
-        shows: [],
-        isLoading: false,
-        error,
-      });
+      setShows([]);
+      setIsLoading(false);
+      setError(error);
     }
-  }
+  };
 
-  enableButton() {
-    const { shows } = this.state;
-
-    if (shows.length > 20) {
-      this.setState({ isShowMoreButtonDisable: true });
+  const enableButton = () => {
+    if (shows.length >= 20) {
+      setIsShowMoreButtonDisable(true);
     } else {
-      this.setState({ isShowMoreButtonDisable: false });
+      setIsShowMoreButtonDisable(false);
     }
-  }
+  };
 
-  showMoreShows() {
-    this.setState((prevState) => ({
-      isMoreShows: !prevState.isMoreShows,
-    }));
-  }
-
-  getSearchChange() {
+  const getSearchChange = () => {
     const savedValue = localStorage.getItem('TVShowSearch') || '';
-    this.setState({ searchQuery: savedValue });
-  }
+    setSearchQuery(savedValue);
+  };
 
-  async handleSearch() {
-    this.getSearchChange();
+  const handleSearch = async () => {
+    getSearchChange();
 
     const savedValue = localStorage.getItem('TVShowSearch') || '';
 
     if (savedValue === '') {
-      this.loadShows();
-      this.enableButton();
+      loadShows(currentPage);
+      enableButton();
       return;
     }
 
     try {
-      // const response = await fetch(`${URL.SEARCH}${searchQuery}`);
+      console.log(searchQuery);
       const response = await fetch(`${URL.SEARCH}${savedValue}`);
 
       if (!response.ok) {
@@ -119,95 +84,59 @@ class App extends React.Component<object, AppProps> {
 
       const data: ShowData[] = await response.json();
 
-      this.setState({
-        shows: data,
-        isLoading: false,
-        currentPage: 0,
-      });
+      setShows(data);
+      setIsLoading(false);
+      setCurrentPage(0);
+
+      navigate(`/${ROUTER_PATHS.SEARCH}?q=${encodeURIComponent(savedValue)}`);
     } catch (error) {
-      this.setState({
-        shows: [],
-        isLoading: false,
-        error,
-      });
+      setShows([]);
+      setIsLoading(false);
+      setError(error);
     }
 
-    this.enableButton();
-  }
+    enableButton();
+  };
 
-  throwError() {
-    this.setState({ isClickedErrorButton: true });
-    console.error('Error information: ', 'The Error boundary button was triggered');
-  }
+  React.useEffect(() => {
+    const savedValue = localStorage.getItem('TVShowSearch') || '';
+    savedValue === '' ? loadShows(currentPage) : handleSearch();
+    enableButton();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  render() {
-    const {
-      shows,
-      isLoading,
-      error,
-      currentPage,
-      itemsPerPage,
-      isMoreShows,
-      isShowMoreButtonDisable,
-      isClickedErrorButton,
-    } = this.state;
+  const currentPageItems = shows.slice(0, itemsPerPage);
 
-    const currentPageItems = shows.slice(0, itemsPerPage);
+  const getMainPageProps = () => ({
+    isLoading,
+    error,
+    loadShows,
+    isShowMoreButtonDisable,
+    currentPage,
+    shows,
+    currentPageItems,
+    setCurrentPage,
+    prevPage,
+    nextPage,
+    isCardItemsDarked,
+    setIsCardItemsDarked,
+  });
 
-    return (
-      <ErrorBoundary isClickedErrorButton={isClickedErrorButton}>
-        <div className="wrapper">
-          <Header handleSearch={this.handleSearch} value={''} />
-          <main className="main">
-            <div className="container">
-              {isLoading ? (
-                <p className={style.loading}>Loading...</p>
-              ) : error ? (
-                <div className={style.error}>
-                  <MdReportGmailerrorred />
-                  <span className={style.text}>Error occurred please try later</span>
-                </div>
-              ) : (
-                <>
-                  <div className={style.top}>
-                    <h1 className="title">TV Shows</h1>
-                    {!isLoading && (
-                      <div className={style.buttons}>
-                        <button
-                          className="button"
-                          onClick={this.loadShows}
-                          disabled={isShowMoreButtonDisable}
-                        >
-                          {currentPage === 0 ? 'Go back' : 'Next page'}
-                        </button>
-                        <button className={style.boundary} onClick={this.throwError}>
-                          Error Boundary
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
-                  {isMoreShows ? <CardItems data={shows} /> : <CardItems data={currentPageItems} />}
-
-                  {!isLoading && (
-                    <div className={style.more}>
-                      <button
-                        className="button"
-                        onClick={this.showMoreShows}
-                        disabled={isShowMoreButtonDisable}
-                      >
-                        {isMoreShows ? 'Show less' : 'Show more'}
-                      </button>
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-          </main>
-        </div>
-      </ErrorBoundary>
-    );
-  }
-}
+  return (
+    <Routes>
+      <Route path={ROUTER_PATHS.MAIN} element={<Layout handleSearch={handleSearch} />}>
+        <Route index element={<MainPage {...getMainPageProps()} />}></Route>
+        <Route path={ROUTER_PATHS.SHOWS} element={<MainPage {...getMainPageProps()} />}>
+          <Route
+            path={ROUTER_PATHS.DETAILS}
+            element={<DetailsPage setIsCardItemsDarked={setIsCardItemsDarked} />}
+          />
+        </Route>
+        <Route path={ROUTER_PATHS.SEARCH} element={<MainPage {...getMainPageProps()} />}></Route>
+        <Route path={ROUTER_PATHS.NOTFOUND} element={<NotFound />}></Route>
+      </Route>
+    </Routes>
+  );
+};
 
 export default App;
