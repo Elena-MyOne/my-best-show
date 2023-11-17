@@ -3,17 +3,29 @@ import { ShowData } from '../models/interfaces';
 import { useNavigate } from 'react-router-dom';
 import { ROUTER_PATHS, URL } from '../models/enums';
 import { AppContext } from './AppContext';
+// import { useLoadShowsQuery, useSearchShowsQuery } from '../redux/api/apiSlice';
+import { DEFAULT_ITEMS_PER_PAGE } from '../constants/page.constants';
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [shows, setShows] = React.useState<ShowData[]>([]);
+  const [shows, setShows] = React.useState<ShowData[]>([]); //
+
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<Error | null | unknown>(null);
-  const [itemsPerPage] = React.useState(20);
-  const [switchMoreShows, setSwitchMoreShows] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<Error | null | unknown>(null); //
+
+  const [switchMoreShows, setSwitchMoreShows] = React.useState<boolean>(false); //
+
   const [currentPage, setCurrentPage] = React.useState(0);
   const [nextPage, setNextPage] = React.useState<number | null>(null);
   const [prevPage, setPrevPage] = React.useState<number | null>(null);
   const [isCardItemsDarked, setIsCardItemsDarked] = React.useState<boolean>(false);
+
+  // //============
+  // const { data: showsFromRedux } = useLoadShowsQuery(0);
+  // console.log(showsFromRedux);
+
+  // const { data: searchShowsFromRedux } = useSearchShowsQuery('girl');
+  // console.log(searchShowsFromRedux);
+  // //============
 
   const navigate = useNavigate();
 
@@ -86,7 +98,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const currentPageItems = shows.slice(0, itemsPerPage);
+  const currentPageItems = shows.slice(0, DEFAULT_ITEMS_PER_PAGE);
 
   return (
     <AppContext.Provider
