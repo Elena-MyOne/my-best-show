@@ -1,20 +1,27 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import style from './CardItems.module.scss';
 import { SearchShowsData, ShowData } from '../../models/interfaces';
 import Card from '../Card/Card';
-import { AppContext } from '../../Contexts/AppContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectShows, setIsCardItemsDarked } from '../../redux/slices/ShowsSlice';
+import { AppDispatch } from '../../redux/store';
 
 interface CardItemsProps {
   shows: ShowData[] | SearchShowsData[];
 }
 
 const CardItems: React.FC<CardItemsProps> = ({ shows }) => {
-  const { isCardItemsDarked, setIsCardItemsDarked } = useContext(AppContext);
+  const { isCardItemsDarked } = useSelector(selectShows);
+  const dispatch = useDispatch<AppDispatch>();
 
   return (
     <>
       <div className={style.items}>
-        {shows && <div className={style.shows}>{renderData(shows, setIsCardItemsDarked)}</div>}
+        {shows && (
+          <div className={style.shows}>
+            {renderData(shows, () => dispatch(setIsCardItemsDarked(true)))}
+          </div>
+        )}
         {isCardItemsDarked && <div className={style.back}></div>}
       </div>
     </>

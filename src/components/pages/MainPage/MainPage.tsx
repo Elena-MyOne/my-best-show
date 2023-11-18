@@ -27,7 +27,8 @@ const MainPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { shows, searchValue, apiCallPage, isLoading } = useSelector(selectShows);
+  const { shows, searchValue, apiCallPage, isLoading, isCardItemsDarked } =
+    useSelector(selectShows);
   const dispatch = useDispatch<AppDispatch>();
 
   const {
@@ -51,14 +52,27 @@ const MainPage: React.FC = () => {
   React.useEffect(() => {
     if (searchValue) {
       searchShowsData && dispatch(handleSearch(searchShowsData));
-      navigate(`/${ROUTER_PATHS.SEARCH}?q=${encodeURIComponent(searchValue)}`);
+      if (!isCardItemsDarked) {
+        navigate(`/${ROUTER_PATHS.SEARCH}?q=${encodeURIComponent(searchValue)}`);
+      }
     } else {
       showsData && dispatch(loadShows(showsData));
-      navigate(`/${ROUTER_PATHS.SHOWS}?page=${encodeURIComponent(apiCallPage)}`);
+      if (!isCardItemsDarked) {
+        navigate(`/${ROUTER_PATHS.SHOWS}?page=${encodeURIComponent(apiCallPage)}`);
+      }
     }
 
     dispatch(setSwitchMoreShows(shows.length <= DEFAULT_ITEMS_PER_PAGE));
-  }, [searchValue, searchShowsData, showsData, dispatch, navigate, apiCallPage, shows.length]);
+  }, [
+    searchValue,
+    searchShowsData,
+    showsData,
+    dispatch,
+    navigate,
+    apiCallPage,
+    shows.length,
+    isCardItemsDarked,
+  ]);
 
   const currentPageItems = shows && shows.slice(0, DEFAULT_ITEMS_PER_PAGE);
 
@@ -72,7 +86,6 @@ const MainPage: React.FC = () => {
     const path = location.pathname;
     if (path.includes('details')) {
       navigate(`${ROUTER_PATHS.MAIN}`);
-
       dispatch(setIsCardItemsDarked(false));
     }
   };

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import style from './DetailsPage.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ROUTER_PATHS, URL } from '../../../models/enums';
@@ -6,20 +6,20 @@ import { ShowData } from '../../../models/interfaces';
 import { AiFillStar } from 'react-icons/ai';
 import { GoLinkExternal } from 'react-icons/go';
 import Spinner from '../../Spinner/Spinner';
-import { AppContext } from '../../../Contexts/AppContext';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../redux/store';
+import { setIsCardItemsDarked } from '../../../redux/slices/ShowsSlice';
 
 const DetailsPage: React.FC = () => {
   const { id } = useParams();
 
   const navigate = useNavigate();
 
-  const { setIsCardItemsDarked } = useContext(AppContext);
+  const dispatch = useDispatch<AppDispatch>();
 
   const goBack = () => {
     navigate(`${ROUTER_PATHS.MAIN}`);
-    if (setIsCardItemsDarked) {
-      setIsCardItemsDarked(false);
-    }
+    dispatch(setIsCardItemsDarked(false));
   };
 
   const noDate = 'no data to show';

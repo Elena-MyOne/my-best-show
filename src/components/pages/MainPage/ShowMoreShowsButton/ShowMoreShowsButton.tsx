@@ -2,7 +2,6 @@ import React from 'react';
 import style from './ShowMoreShowsButton.module.scss';
 import { useSelector } from 'react-redux';
 import { selectShows } from '../../../../redux/slices/ShowsSlice';
-// import { AppContext } from '../../../../Contexts/AppContext';
 
 interface ShowMoreShowsButtonProps {
   showMoreShows: () => void;
@@ -13,7 +12,6 @@ const ShowMoreShowsButton: React.FC<ShowMoreShowsButtonProps> = ({
   showMoreShows,
   isMoreShows,
 }) => {
-  // const { switchMoreShows } = useContext(AppContext);
   const { switchMoreShows } = useSelector(selectShows);
   return (
     <div className={style.more}>

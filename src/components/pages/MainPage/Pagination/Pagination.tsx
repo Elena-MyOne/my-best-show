@@ -1,4 +1,3 @@
-// import React, { useContext } from 'react';
 import React from 'react';
 import style from './Pagination.module.scss';
 import { LAST_PAGE } from '../../../../constants/page.constants';
