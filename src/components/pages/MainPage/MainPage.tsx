@@ -96,7 +96,11 @@ const MainPage: React.FC = () => {
         <>
           <div className={style.top}>
             <h1 className="title">Shows List</h1>
-            {shows && shows.length < ITEMS_PER_PAGE ? null : <Pagination />}
+            {!isCardItemsDarked && (
+              <div className="pagination">
+                {shows && shows.length < ITEMS_PER_PAGE ? null : <Pagination />}
+              </div>
+            )}
           </div>
         </>
         {isLoadingMainPage || isLoading ? (
