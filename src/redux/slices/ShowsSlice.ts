@@ -3,7 +3,6 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 import { getSearchValueFromLocalStorage } from '../../utils/getSearchValueFromLocalStorage';
 import { SearchShowsData, ShowData } from '../../models/interfaces';
-import { DEFAULT_ITEMS_PER_PAGE } from '../../constants/page.constants';
 
 export interface SearchState {
   searchValue: string;
@@ -82,8 +81,6 @@ export const SearchSlice = createSlice({
 
     handleSearch(state, action: PayloadAction<ShowData[] | SearchShowsData[]>) {
       if (!state.searchValue) {
-        // await loadShows(currentPage);
-        state.switchMoreShows = state.shows.length >= DEFAULT_ITEMS_PER_PAGE;
         return;
       }
 

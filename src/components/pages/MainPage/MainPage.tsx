@@ -16,6 +16,7 @@ import {
   selectShows,
   setCurrentPage,
   setIsCardItemsDarked,
+  setSwitchMoreShows,
 } from '../../../redux/slices/ShowsSlice';
 import { AppDispatch } from '../../../redux/store';
 import { useLoadShowsQuery, useSearchShowsQuery } from '../../../redux/api/apiSlice';
@@ -56,8 +57,8 @@ const MainPage: React.FC = () => {
       navigate(`/${ROUTER_PATHS.SHOWS}?page=${encodeURIComponent(apiCallPage)}`);
     }
 
-    //! enableButton();
-  }, [searchValue, searchShowsData, showsData, dispatch, navigate, apiCallPage]);
+    dispatch(setSwitchMoreShows(shows.length <= DEFAULT_ITEMS_PER_PAGE));
+  }, [searchValue, searchShowsData, showsData, dispatch, navigate, apiCallPage, shows.length]);
 
   const currentPageItems = shows && shows.slice(0, DEFAULT_ITEMS_PER_PAGE);
 
