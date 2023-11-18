@@ -12,9 +12,13 @@ export interface SearchState {
   isLoading: boolean;
   isError: boolean;
 
-  currentPage: number;
-
   switchMoreShows: boolean;
+  isCardItemsDarked: boolean;
+
+  currentPage: number;
+  apiCallPage: number;
+  nextPage: number | null;
+  prevPage: number | null;
 }
 
 const initialState: SearchState = {
@@ -24,9 +28,13 @@ const initialState: SearchState = {
   isLoading: false,
   isError: false,
 
-  currentPage: 0,
-
   switchMoreShows: false,
+  isCardItemsDarked: false,
+
+  currentPage: 0,
+  apiCallPage: 0,
+  nextPage: null,
+  prevPage: null,
 };
 
 export const SearchSlice = createSlice({
@@ -36,14 +44,40 @@ export const SearchSlice = createSlice({
     setSearchValue(state, action: PayloadAction<string>) {
       state.searchValue = action.payload;
     },
+
     setShows(state, action: PayloadAction<ShowData[] | SearchShowsData[]>) {
       state.shows = action.payload;
     },
     setSwitchMoreShows(state, action: PayloadAction<boolean>) {
       state.switchMoreShows = action.payload;
     },
+    setIsCardItemsDarked(state, action: PayloadAction<boolean>) {
+      state.isCardItemsDarked = action.payload;
+    },
+    setIsIsLoading(state, action: PayloadAction<boolean>) {
+      state.isLoading = action.payload;
+    },
     setIsError(state, action: PayloadAction<boolean>) {
       state.isError = action.payload;
+    },
+
+    setCurrentPage(state, action: PayloadAction<number>) {
+      state.currentPage = action.payload;
+    },
+    setApiCallPage(state, action: PayloadAction<number>) {
+      state.apiCallPage = action.payload;
+    },
+    setNextPage(state, action: PayloadAction<number | null>) {
+      state.nextPage = action.payload;
+    },
+    setPrevPage(state, action: PayloadAction<number | null>) {
+      state.prevPage = action.payload;
+    },
+
+    loadShows(state, action: PayloadAction<ShowData[] | SearchShowsData[]>) {
+      state.shows = action.payload;
+      state.nextPage = state.apiCallPage + 1;
+      state.prevPage = state.apiCallPage > 0 ? state.apiCallPage - 1 : null;
     },
 
     handleSearch(state, action: PayloadAction<ShowData[] | SearchShowsData[]>) {
@@ -53,14 +87,27 @@ export const SearchSlice = createSlice({
         return;
       }
 
+      state.isLoading = true;
       state.shows = action.payload;
-      state.isLoading = false;
       state.currentPage = 0;
+      state.isLoading = false;
     },
   },
 });
 
 export const selectShows = (state: RootState): SearchState => state.shows;
-export const { setSearchValue, setShows, setSwitchMoreShows, setIsError, handleSearch } =
-  SearchSlice.actions;
+export const {
+  setSearchValue,
+  setShows,
+  setSwitchMoreShows,
+  setIsCardItemsDarked,
+  setIsIsLoading,
+  setIsError,
+  setCurrentPage,
+  setApiCallPage,
+  setNextPage,
+  setPrevPage,
+  loadShows,
+  handleSearch,
+} = SearchSlice.actions;
 export default SearchSlice.reducer;

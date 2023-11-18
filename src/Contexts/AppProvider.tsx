@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTER_PATHS, URL } from '../models/enums';
 import { AppContext } from './AppContext';
 // import { useLoadShowsQuery, useSearchShowsQuery } from '../redux/api/apiSlice';
-import { DEFAULT_ITEMS_PER_PAGE } from '../constants/page.constants';
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [shows, setShows] = React.useState<ShowData[]>([]); //
@@ -14,10 +13,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const [switchMoreShows, setSwitchMoreShows] = React.useState<boolean>(false); //
 
-  const [currentPage, setCurrentPage] = React.useState(0);
-  const [nextPage, setNextPage] = React.useState<number | null>(null);
-  const [prevPage, setPrevPage] = React.useState<number | null>(null);
-  const [isCardItemsDarked, setIsCardItemsDarked] = React.useState<boolean>(false);
+  const [currentPage, setCurrentPage] = React.useState(0); //
+  const [nextPage, setNextPage] = React.useState<number | null>(null); //
+  const [prevPage, setPrevPage] = React.useState<number | null>(null); //
+  const [isCardItemsDarked, setIsCardItemsDarked] = React.useState<boolean>(false); //
 
   // //============
   // const { data: showsFromRedux } = useLoadShowsQuery(0);
@@ -91,14 +90,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     enableButton();
   };
 
-  React.useEffect(() => {
-    const savedValue = localStorage.getItem('TVShowSearch') || '';
-    !savedValue ? loadShows(currentPage) : handleSearch();
-    enableButton();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const currentPageItems = shows.slice(0, DEFAULT_ITEMS_PER_PAGE);
+  // React.useEffect(() => {
+  //   const savedValue = localStorage.getItem('TVShowSearch') || '';
+  //   !savedValue ? loadShows(currentPage) : handleSearch();
+  //   enableButton();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   return (
     <AppContext.Provider
@@ -110,7 +107,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         switchMoreShows,
         currentPage,
         shows,
-        currentPageItems,
         setCurrentPage,
         prevPage,
         nextPage,

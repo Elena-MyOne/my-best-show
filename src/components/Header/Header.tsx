@@ -13,29 +13,25 @@ import {
 } from '../../redux/slices/ShowsSlice';
 import { AppDispatch } from '../../redux/store';
 import { useSearchShowsQuery } from '../../redux/api/apiSlice';
+import { getSearchValueFromLocalStorage } from '../../utils/getSearchValueFromLocalStorage';
 
 const Header: React.FC = () => {
+  const [inputValue, setInputValue] = React.useState(getSearchValueFromLocalStorage());
+
   const { searchValue } = useSelector(selectShows);
   const dispatch = useDispatch<AppDispatch>();
 
   const navigate = useNavigate();
 
-  const {
-    data: searchShowsData,
-    isLoading,
-    // isSuccess,
-    isError,
-    // error,
-  } = useSearchShowsQuery(searchValue);
-  console.log('searchShowsData: ', searchShowsData);
-  console.log('isLoading: ', isLoading);
+  const { data: searchShowsData, isError } = useSearchShowsQuery(searchValue);
 
   const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
     const target = event.currentTarget.value;
-    dispatch(setSearchValue(target));
+    setInputValue(target);
   };
 
   const handleButtonClick = () => {
+    dispatch(setSearchValue(inputValue));
     localStorage.setItem('TVShowSearch', searchValue);
     searchShowsData && dispatch(handleSearch(searchShowsData));
     isError && dispatch(setIsError(isError));
@@ -60,7 +56,7 @@ const Header: React.FC = () => {
             className={style.input}
             placeholder="Search show..."
             onChange={handleChange}
-            value={searchValue}
+            value={inputValue}
           />
           <button className={style.button} onClick={handleButtonClick}>
             <BsSearch />

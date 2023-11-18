@@ -5,7 +5,7 @@ import Card from '../Card/Card';
 import { AppContext } from '../../Contexts/AppContext';
 
 interface CardItemsProps {
-  shows: ShowData[];
+  shows: ShowData[] | SearchShowsData[];
 }
 
 const CardItems: React.FC<CardItemsProps> = ({ shows }) => {
