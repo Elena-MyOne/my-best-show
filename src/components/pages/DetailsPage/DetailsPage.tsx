@@ -1,21 +1,22 @@
 import React from 'react';
 import style from './DetailsPage.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ROUTER_PATHS, URL } from '../../../models/enums';
-import { ShowData } from '../../../models/interfaces';
+import { ROUTER_PATHS } from '../../../models/enums';
 import { AiFillStar } from 'react-icons/ai';
 import { GoLinkExternal } from 'react-icons/go';
 import Spinner from '../../Spinner/Spinner';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux/store';
 import { setIsCardItemsDarked } from '../../../redux/slices/ShowsSlice';
+import { useGetShowByIdQuery } from '../../../redux/api/apiSlice';
+import { ShowData } from '../../../models/interfaces';
 
 const DetailsPage: React.FC = () => {
   const { id } = useParams();
-
   const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
+  const { data, isLoading, isSuccess, isError, error } = useGetShowByIdQuery(id!);
 
   const goBack = () => {
     navigate(`${ROUTER_PATHS.MAIN}`);
@@ -24,7 +25,6 @@ const DetailsPage: React.FC = () => {
 
   const noDate = 'no data to show';
 
-  const [isLoading, setIsLoading] = React.useState(false);
   const [show, setShow] = React.useState({
     id: 0,
     image: '',
@@ -38,22 +38,12 @@ const DetailsPage: React.FC = () => {
     officialSite: '',
   });
 
-  const getShowById = async () => {
-    if (isLoading) {
-      return;
+  const getShowById = (data: ShowData) => {
+    if (isError && error) {
+      console.error(error);
     }
 
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(`${URL.SHOWS}/${id}`);
-
-      if (!response.ok) {
-        throw new Error('Network response error');
-      }
-
-      const data: ShowData = await response.json();
-
+    if (isSuccess) {
       show.genres = [];
       const image = data.image?.original || '';
 
@@ -69,18 +59,13 @@ const DetailsPage: React.FC = () => {
         ended: data.ended,
         officialSite: data.officialSite,
       });
-
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
     }
   };
 
   React.useEffect(() => {
-    getShowById();
+    data && getShowById(data);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id, data]);
 
   const years = `${show.premiered ? show.premiered.slice(0, 4) : ''} ${
     show.ended ? '- ' + show.ended.slice(0, 4) : ''

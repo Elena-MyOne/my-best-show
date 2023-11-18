@@ -12,7 +12,10 @@ export const apiSlice = createApi({
     searchShows: builder.query<SearchShowsData[], string>({
       query: (searchValue) => `search/shows?q=${searchValue}`,
     }),
+    getShowById: builder.query<ShowData, string>({
+      query: (id) => `shows/${id}`,
+    }),
   }),
 });
 
-export const { useLoadShowsQuery, useSearchShowsQuery } = apiSlice;
+export const { useLoadShowsQuery, useSearchShowsQuery, useGetShowByIdQuery } = apiSlice;
