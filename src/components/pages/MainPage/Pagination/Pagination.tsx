@@ -1,49 +1,58 @@
-import React, { useContext } from 'react';
+// import React, { useContext } from 'react';
+import React from 'react';
 import style from './Pagination.module.scss';
 import { LAST_PAGE } from '../../../../constants/page.constants';
-import { AppContext } from '../../../../Contexts/AppContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../../../redux/store';
+import {
+  loadShows,
+  selectShows,
+  setApiCallPage,
+  setCurrentPage,
+  setIsIsLoading,
+} from '../../../../redux/slices/ShowsSlice';
+import { useLoadShowsQuery } from '../../../../redux/api/apiSlice';
 
 const Pagination: React.FC = () => {
   const [isNextDisabled, setIsNextDisabled] = React.useState(false);
   const [isPrevDisabled, setIsPrevDisabled] = React.useState(false);
 
+  const dispatch = useDispatch<AppDispatch>();
   const {
-    loadShows,
-    switchMoreShows,
-    currentPage = 0,
-    setCurrentPage,
-    prevPage,
     nextPage,
-  } = useContext(AppContext);
+    prevPage,
+    currentPage = 0,
+    switchMoreShows,
+    apiCallPage,
+  } = useSelector(selectShows);
+
+  const { data: showsData, isLoading: isLoadingOnPagination } = useLoadShowsQuery(apiCallPage);
+
+  React.useEffect(() => {
+    dispatch(setIsIsLoading(isLoadingOnPagination));
+  }, [dispatch, isLoadingOnPagination]);
 
   const handleNextButton = async () => {
     if (!switchMoreShows && nextPage !== null) {
-      if (loadShows && nextPage && setCurrentPage) {
-        await loadShows(nextPage);
-        setCurrentPage(nextPage);
-      }
+      dispatch(setApiCallPage(nextPage));
+      showsData && dispatch(loadShows(showsData));
+      dispatch(setCurrentPage(nextPage));
     }
   };
 
   const handlePrevButton = async () => {
     if (!switchMoreShows && prevPage !== null && prevPage != undefined) {
-      try {
-        await loadShows?.(prevPage);
-        setCurrentPage?.(prevPage ?? 0);
-      } catch (error) {
-        console.error('Error loading previous page:', error);
-      }
+      dispatch(setApiCallPage(prevPage));
+      showsData && dispatch(loadShows(showsData));
+      dispatch(setCurrentPage(prevPage));
     }
   };
 
   const handleLast = async () => {
     if (!switchMoreShows && LAST_PAGE) {
-      try {
-        await loadShows?.(LAST_PAGE);
-        setCurrentPage?.(LAST_PAGE ?? 0);
-      } catch (error) {
-        console.error('Error loading last page:', error);
-      }
+      dispatch(setApiCallPage(LAST_PAGE));
+      showsData && dispatch(loadShows(showsData));
+      dispatch(setCurrentPage(LAST_PAGE ?? 0));
     }
   };
 

@@ -26,17 +26,17 @@ const MainPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { shows, searchValue, apiCallPage } = useSelector(selectShows);
+  const { shows, searchValue, apiCallPage, isLoading } = useSelector(selectShows);
   const dispatch = useDispatch<AppDispatch>();
 
   const {
     data: showsData,
-    isLoading,
+    isLoading: isLoadingMainPage,
     // isSuccess,
     isError: isLoadingError,
     // error,
   } = useLoadShowsQuery(apiCallPage);
-  console.log('showsData: ', showsData);
+  // console.log('showsData: ', showsData);
 
   const {
     data: searchShowsData,
@@ -85,7 +85,7 @@ const MainPage: React.FC = () => {
             {shows && shows.length < ITEMS_PER_PAGE ? null : <Pagination />}
           </div>
         </>
-        {isLoading ? (
+        {isLoadingMainPage || isLoading ? (
           <Loader />
         ) : isLoadingError || isSearchError ? (
           <ErrorMessage />
@@ -100,7 +100,7 @@ const MainPage: React.FC = () => {
               </div>
             </div>
 
-            {!isLoading && (
+            {!isLoadingMainPage && (
               <ShowMoreShowsButton showMoreShows={showMoreShows} isMoreShows={isMoreShows} />
             )}
           </>

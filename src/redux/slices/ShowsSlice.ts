@@ -76,8 +76,8 @@ export const SearchSlice = createSlice({
 
     loadShows(state, action: PayloadAction<ShowData[] | SearchShowsData[]>) {
       state.shows = action.payload;
-      state.nextPage = state.apiCallPage + 1;
-      state.prevPage = state.apiCallPage > 0 ? state.apiCallPage - 1 : null;
+      state.nextPage = state.currentPage + 1;
+      state.prevPage = state.currentPage > 0 ? state.currentPage - 1 : null;
     },
 
     handleSearch(state, action: PayloadAction<ShowData[] | SearchShowsData[]>) {
