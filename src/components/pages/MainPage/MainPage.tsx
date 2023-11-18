@@ -110,9 +110,18 @@ const MainPage: React.FC = () => {
         ) : (
           <>
             <div className={style.content}>
-              <div className={style.items} onClick={closeDetails}>
-                {isMoreShows ? <CardItems shows={shows} /> : <CardItems shows={currentPageItems} />}
-              </div>
+              {shows.length ? (
+                <div className={style.items} onClick={closeDetails}>
+                  {isMoreShows ? (
+                    <CardItems shows={shows} />
+                  ) : (
+                    <CardItems shows={currentPageItems} />
+                  )}
+                </div>
+              ) : (
+                <div className={style.nothing}>Upsy, nothing to show &#128550;</div>
+              )}
+
               <div className={style.details}>
                 <Outlet />
               </div>
