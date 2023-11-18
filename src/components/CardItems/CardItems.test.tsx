@@ -3,12 +3,25 @@ import CardItems from './CardItems';
 import { BrowserRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockShowsList } from '../../data/mockData';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
+
+const mockStore = configureStore();
+const initialState = {
+  shows: {
+    isCardItemsDarked: false,
+  },
+};
+
+const store = mockStore(initialState);
 
 const MockCardItems = () => {
   return (
-    <BrowserRouter>
-      <CardItems shows={mockShowsList} />
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <CardItems shows={mockShowsList} />
+      </BrowserRouter>
+    </Provider>
   );
 };
 

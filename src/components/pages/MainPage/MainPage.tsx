@@ -34,20 +34,10 @@ const MainPage: React.FC = () => {
   const {
     data: showsData,
     isLoading: isLoadingMainPage,
-    // isSuccess,
     isError: isLoadingError,
-    // error,
   } = useLoadShowsQuery(apiCallPage);
-  // console.log('showsData: ', showsData);
 
-  const {
-    data: searchShowsData,
-    // isLoading,
-    // isSuccess,
-    isError: isSearchError,
-    // error,
-  } = useSearchShowsQuery(searchValue);
-  console.log('searchShowsData: ', searchShowsData);
+  const { data: searchShowsData, isError: isSearchError } = useSearchShowsQuery(searchValue);
 
   React.useEffect(() => {
     if (searchValue) {

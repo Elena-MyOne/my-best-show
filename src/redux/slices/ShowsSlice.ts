@@ -84,10 +84,8 @@ export const SearchSlice = createSlice({
         return;
       }
 
-      state.isLoading = true;
       state.shows = action.payload;
       state.currentPage = 0;
-      state.isLoading = false;
     },
   },
 });
