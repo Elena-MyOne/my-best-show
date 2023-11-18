@@ -5,7 +5,6 @@ import ShowsSlice from './slices/ShowsSlice';
 export const store = configureStore({
   reducer: {
     shows: ShowsSlice,
-    // search: SearchSlice,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
