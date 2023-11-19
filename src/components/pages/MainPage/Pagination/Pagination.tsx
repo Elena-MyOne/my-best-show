@@ -1,45 +1,45 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import style from './Pagination.module.scss';
 import { LAST_PAGE } from '../../../../constants/page.constants';
+import { AppContext } from '../../../../Contexts/AppContext';
 
-interface PaginationProps {
-  loadShows: (page: number) => Promise<void>;
-  isShowMoreButtonDisable: boolean;
-  currentPage: number;
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-  prevPage: number | null;
-  nextPage: number | null;
-}
-
-const Pagination: React.FC<PaginationProps> = ({
-  loadShows,
-  isShowMoreButtonDisable,
-  currentPage,
-  setCurrentPage,
-  prevPage,
-  nextPage,
-}) => {
+const Pagination: React.FC = () => {
   const [isNextDisabled, setIsNextDisabled] = React.useState(false);
   const [isPrevDisabled, setIsPrevDisabled] = React.useState(false);
 
+  const {
+    loadShows,
+    isShowMoreButtonDisable,
+    currentPage = 0,
+    setCurrentPage,
+    prevPage,
+    nextPage,
+  } = useContext(AppContext);
+
   const handleNextButton = async () => {
     if (!isShowMoreButtonDisable && nextPage !== null) {
-      await loadShows(nextPage);
-      setCurrentPage(nextPage);
+      if (loadShows && nextPage && setCurrentPage) {
+        await loadShows(nextPage);
+        setCurrentPage(nextPage);
+      }
     }
   };
 
   const handlePrevButton = async () => {
     if (!isShowMoreButtonDisable && prevPage !== null) {
-      await loadShows(prevPage);
-      setCurrentPage(prevPage);
+      if (loadShows && setCurrentPage && prevPage) {
+        await loadShows(prevPage);
+        setCurrentPage(prevPage);
+      }
     }
   };
 
   const handleLast = async () => {
     if (!isShowMoreButtonDisable && LAST_PAGE) {
-      await loadShows(LAST_PAGE);
-      setCurrentPage(LAST_PAGE);
+      if (loadShows && setCurrentPage) {
+        await loadShows(LAST_PAGE);
+        setCurrentPage(LAST_PAGE);
+      }
     }
   };
 
@@ -70,7 +70,12 @@ const Pagination: React.FC<PaginationProps> = ({
         </button>
       )}
 
-      <button className={style.next} disabled={isNextDisabled} onClick={handleNextButton}>
+      <button
+        className={style.next}
+        disabled={isNextDisabled}
+        onClick={handleNextButton}
+        data-testid="next"
+      >
         next
       </button>
     </div>

@@ -1,19 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import style from './CardItems.module.scss';
 import { SearchShowsData, ShowData } from '../../models/interfaces';
 import Card from '../Card/Card';
+import { AppContext } from '../../Contexts/AppContext';
 
-interface Props {
-  data: ShowData[] | SearchShowsData[] | null;
-  isCardItemsDarked: boolean;
-  setIsCardItemsDarked: React.Dispatch<React.SetStateAction<boolean>>;
+interface CardItemsProps {
+  shows: ShowData[];
 }
 
-const CardItems: React.FC<Props> = ({ data, isCardItemsDarked, setIsCardItemsDarked }) => {
+const CardItems: React.FC<CardItemsProps> = ({ shows }) => {
+  const { isCardItemsDarked, setIsCardItemsDarked } = useContext(AppContext);
+
   return (
     <>
       <div className={style.items}>
-        {data && <div className={style.shows}>{renderData(data, setIsCardItemsDarked)}</div>}
+        {shows && <div className={style.shows}>{renderData(shows, setIsCardItemsDarked)}</div>}
         {isCardItemsDarked && <div className={style.back}></div>}
       </div>
     </>
@@ -22,7 +23,7 @@ const CardItems: React.FC<Props> = ({ data, isCardItemsDarked, setIsCardItemsDar
 
 const renderData = (
   data: ShowData[] | SearchShowsData[],
-  setIsCardItemsDarked: React.Dispatch<React.SetStateAction<boolean>>
+  setIsCardItemsDarked: React.Dispatch<React.SetStateAction<boolean>> | undefined
 ) => {
   if (Array.isArray(data) && data.length > 0) {
     if (Object.prototype.hasOwnProperty.call(data[0], 'show')) {

@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import style from './ShowMoreShowsButton.module.scss';
+import { AppContext } from '../../../../Contexts/AppContext';
 
 interface ShowMoreShowsButtonProps {
   showMoreShows: () => void;
-  isShowMoreButtonDisable: boolean;
   isMoreShows: boolean;
 }
 
 const ShowMoreShowsButton: React.FC<ShowMoreShowsButtonProps> = ({
   showMoreShows,
-  isShowMoreButtonDisable,
   isMoreShows,
 }) => {
+  const { isShowMoreButtonDisable } = useContext(AppContext);
   return (
     <div className={style.more}>
       <button className="button" onClick={showMoreShows} disabled={isShowMoreButtonDisable}>
