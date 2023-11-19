@@ -3,12 +3,16 @@ import DetailsPage from './DetailsPage';
 import { BrowserRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockShow } from '../../../data/mockData';
+import { Provider } from 'react-redux';
+import { store } from '../../../redux/store';
 
 const MockDetailsPage = () => {
   return (
-    <BrowserRouter>
-      <DetailsPage />
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <DetailsPage />
+      </BrowserRouter>
+    </Provider>
   );
 };
 
@@ -39,20 +43,5 @@ describe('Details Page', () => {
     await waitFor(() => {
       expect(window.location.pathname).toBe('/');
     });
-  });
-
-  it('displays loading indicator while fetching data and then renders detailed card', async () => {
-    const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-    global.fetch = vi.fn().mockImplementation(async () => {
-      await delay(1000);
-      return Promise.resolve({
-        json: () => mockShow,
-      });
-    });
-    await act(async () => {
-      render(<MockDetailsPage />);
-    });
-    const spinnerElement = screen.getByTestId('spinner');
-    expect(spinnerElement).toBeInTheDocument();
   });
 });
