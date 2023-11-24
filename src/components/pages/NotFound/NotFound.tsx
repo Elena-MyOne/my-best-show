@@ -5,8 +5,6 @@ import { useNavigate } from 'react-router-dom';
 const NotFound: React.FC = () => {
   const navigate = useNavigate();
 
-  const goBack = () => navigate(-1);
-
   return (
     <div className={style.body}>
       <div className={style.items}>
@@ -15,7 +13,7 @@ const NotFound: React.FC = () => {
         <span className={style.item}>4</span>
       </div>
       <p className={style.text}>Oh, man. Page not found</p>
-      <button className="button" onClick={goBack}>
+      <button className="button" onClick={() => navigate(-1)}>
         Go back
       </button>
     </div>
