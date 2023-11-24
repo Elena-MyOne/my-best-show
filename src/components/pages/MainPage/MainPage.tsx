@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import style from './MainPage.module.scss';
 import ErrorBoundary from '../../ErrorBoundary/ErrorBoundary';
 import Loader from '../../Loader/Loader';
@@ -22,7 +22,7 @@ import { AppDispatch } from '../../../redux/store';
 import { useLoadShowsQuery, useSearchShowsQuery } from '../../../redux/api/apiSlice';
 
 const MainPage: React.FC = () => {
-  const [isMoreShows, setIsMoreShows] = React.useState<boolean>(false);
+  const [isMoreShows, setIsMoreShows] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -39,7 +39,7 @@ const MainPage: React.FC = () => {
 
   const { data: searchShowsData, isError: isSearchError } = useSearchShowsQuery(searchValue);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (searchValue) {
       searchShowsData && dispatch(handleSearch(searchShowsData));
       if (!isCardItemsDarked) {

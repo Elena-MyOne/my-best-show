@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import style from './Pagination.module.scss';
 import { LAST_PAGE } from '../../../../constants/page.constants';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,8 +13,8 @@ import {
 import { useLoadShowsQuery } from '../../../../redux/api/apiSlice';
 
 const Pagination: React.FC = () => {
-  const [isNextDisabled, setIsNextDisabled] = React.useState(false);
-  const [isPrevDisabled, setIsPrevDisabled] = React.useState(false);
+  const [isNextDisabled, setIsNextDisabled] = useState(false);
+  const [isPrevDisabled, setIsPrevDisabled] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const {
@@ -55,7 +55,7 @@ const Pagination: React.FC = () => {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setIsNextDisabled(switchMoreShows || nextPage === null || currentPage >= LAST_PAGE);
     setIsPrevDisabled(switchMoreShows || prevPage === null || currentPage === 0);
   }, [switchMoreShows, nextPage, prevPage, currentPage]);

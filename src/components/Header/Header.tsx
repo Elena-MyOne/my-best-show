@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import style from './Header.module.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { MdLocalMovies } from 'react-icons/md';
@@ -16,7 +16,7 @@ import { useSearchShowsQuery } from '../../redux/api/apiSlice';
 import { getSearchValueFromLocalStorage } from '../../utils/getSearchValueFromLocalStorage';
 
 const Header: React.FC = () => {
-  const [inputValue, setInputValue] = React.useState(getSearchValueFromLocalStorage());
+  const [inputValue, setInputValue] = useState(getSearchValueFromLocalStorage());
 
   const { searchValue } = useSelector(selectShows);
   const dispatch = useDispatch<AppDispatch>();

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import style from './DetailsPage.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ROUTER_PATHS } from '../../../models/enums';
@@ -25,7 +25,7 @@ const DetailsPage: React.FC = () => {
 
   const noDate = 'no data to show';
 
-  const [show, setShow] = React.useState({
+  const [show, setShow] = useState({
     id: 0,
     image: '',
     name: '',
@@ -67,9 +67,8 @@ const DetailsPage: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, data]);
 
-  const years = `${show.premiered ? show.premiered.slice(0, 4) : ''} ${
-    show.ended ? '- ' + show.ended.slice(0, 4) : ''
-  } `;
+  const years = `${show.premiered ? show.premiered.slice(0, 4) : ''} ${show.ended ? '- ' + show.ended.slice(0, 4) : ''
+    } `;
 
   return (
     <>
