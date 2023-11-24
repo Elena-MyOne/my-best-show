@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import style from './DetailsPage.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ROUTER_PATHS } from '../../../models/enums';
@@ -38,34 +38,36 @@ const DetailsPage: React.FC = () => {
     officialSite: '',
   });
 
-  const getShowById = (data: ShowData) => {
-    if (isError && error) {
-      console.error(error);
-    }
+  const getShowById = useCallback(
+    (data: ShowData) => {
+      if (isError && error) {
+        console.error(error);
+      }
 
-    if (isSuccess) {
-      show.genres = [];
-      const image = data.image?.original || '';
+      if (isSuccess) {
+        show.genres = [];
+        const image = data.image?.original || '';
 
-      setShow({
-        id: data.id,
-        image,
-        name: data.name,
-        rating: data.rating.average,
-        language: data.language,
-        summary: data.summary,
-        genres: data.genres || [noDate],
-        premiered: data.premiered,
-        ended: data.ended,
-        officialSite: data.officialSite,
-      });
-    }
-  };
+        setShow({
+          id: data.id,
+          image,
+          name: data.name,
+          rating: data.rating.average,
+          language: data.language,
+          summary: data.summary,
+          genres: data.genres || [noDate],
+          premiered: data.premiered,
+          ended: data.ended,
+          officialSite: data.officialSite,
+        });
+      }
+    },
+    [isError, error, isSuccess, show]
+  );
 
-  React.useEffect(() => {
+  useEffect(() => {
     data && getShowById(data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, data]);
+  }, [data, getShowById]);
 
   const years = `${show.premiered ? show.premiered.slice(0, 4) : ''} ${show.ended ? '- ' + show.ended.slice(0, 4) : ''
     } `;

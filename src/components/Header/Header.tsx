@@ -16,7 +16,7 @@ import { useSearchShowsQuery } from '../../redux/api/apiSlice';
 import { getSearchValueFromLocalStorage } from '../../utils/getSearchValueFromLocalStorage';
 
 const Header: React.FC = () => {
-  const [inputValue, setInputValue] = useState(getSearchValueFromLocalStorage());
+  const [inputValue, setInputValue] = useState<string>(getSearchValueFromLocalStorage());
 
   const { searchValue } = useSelector(selectShows);
   const dispatch = useDispatch<AppDispatch>();

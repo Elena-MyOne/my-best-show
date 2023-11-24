@@ -13,8 +13,8 @@ import {
 import { useLoadShowsQuery } from '../../../../redux/api/apiSlice';
 
 const Pagination: React.FC = () => {
-  const [isNextDisabled, setIsNextDisabled] = useState(false);
-  const [isPrevDisabled, setIsPrevDisabled] = useState(false);
+  const [isNextDisabled, setIsNextDisabled] = useState<boolean>(false);
+  const [isPrevDisabled, setIsPrevDisabled] = useState<boolean>(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const {
