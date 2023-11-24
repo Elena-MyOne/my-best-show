@@ -12,17 +12,6 @@ import { useGetShowByIdQuery } from '../../../redux/api/apiSlice';
 import { ShowData } from '../../../models/interfaces';
 
 const DetailsPage: React.FC = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-
-  const dispatch = useDispatch<AppDispatch>();
-  const { data, isLoading, isSuccess, isError, error } = useGetShowByIdQuery(id!);
-
-  const goBack = () => {
-    navigate(`${ROUTER_PATHS.MAIN}`);
-    dispatch(setIsCardItemsDarked(false));
-  };
-
   const noDate = 'no data to show';
 
   const [show, setShow] = useState({
@@ -37,6 +26,17 @@ const DetailsPage: React.FC = () => {
     ended: '',
     officialSite: '',
   });
+
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch<AppDispatch>();
+  const { data, isLoading, isSuccess, isError, error } = useGetShowByIdQuery(id!);
+
+  const goBack = () => {
+    navigate(`${ROUTER_PATHS.MAIN}`);
+    dispatch(setIsCardItemsDarked(false));
+  };
 
   const getShowById = useCallback(
     (data: ShowData) => {
@@ -69,9 +69,10 @@ const DetailsPage: React.FC = () => {
     data && getShowById(data);
   }, [data, getShowById]);
 
-  const years = `${show.premiered ? show.premiered.slice(0, 4) : ''} ${
-    show.ended ? '- ' + show.ended.slice(0, 4) : ''
-  } `;
+  const showStarted = show.premiered ? show.premiered.slice(0, 4) : '';
+  const showEnded = show.ended ? '- ' + show.ended.slice(0, 4) : '';
+
+  const years = `${showStarted} ${showEnded} `;
 
   return (
     <>
