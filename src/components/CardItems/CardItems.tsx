@@ -15,36 +15,23 @@ const CardItems: React.FC<CardItemsProps> = ({ shows }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   return (
-    <>
-      <div className={style.items}>
-        {shows && (
-          <div className={style.shows}>
-            {renderData(shows, () => dispatch(setIsCardItemsDarked(true)))}
-          </div>
-        )}
-        {isCardItemsDarked && <div className={style.back}></div>}
-      </div>
-    </>
+    <div className={style.items}>
+      {Array.isArray(shows) && shows.length > 0 && (
+        <div className={style.shows}>
+          {shows.map((item) => {
+            if (Object.prototype.hasOwnProperty.call(item, 'show')) {
+              const showItem = item as SearchShowsData;
+              return <Card key={showItem.show.id} show={showItem.show} setIsCardItemsDarked={() => dispatch(setIsCardItemsDarked(true))} />;
+            } else {
+              const show = item as ShowData;
+              return <Card key={show.id} show={show} setIsCardItemsDarked={() => dispatch(setIsCardItemsDarked(true))} />;
+            }
+          })}
+        </div>
+      )}
+      {isCardItemsDarked && <div className={style.back}></div>}
+    </div>
   );
-};
-
-const renderData = (
-  data: ShowData[] | SearchShowsData[],
-  setIsCardItemsDarked: React.Dispatch<React.SetStateAction<boolean>> | undefined
-) => {
-  if (Array.isArray(data) && data.length > 0) {
-    if (Object.prototype.hasOwnProperty.call(data[0], 'show')) {
-      return (data as SearchShowsData[]).map((item) => (
-        <Card key={item.show.id} show={item.show} setIsCardItemsDarked={setIsCardItemsDarked} />
-      ));
-    } else {
-      return (data as ShowData[]).map((show) => (
-        <Card key={show.id} show={show} setIsCardItemsDarked={setIsCardItemsDarked} />
-      ));
-    }
-  }
-
-  return null;
 };
 
 export default CardItems;
