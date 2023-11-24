@@ -15,7 +15,7 @@ const MockCard = () => {
 describe('Card component', () => {
   it('renders error message when show is null', () => {
     render(<Card show={null} setIsCardItemsDarked={vi.fn()} />);
-    const errorMessage = screen.getByText(/No show data available/i);
+    const errorMessage = screen.getByText(/Show is not available in this moment, please try later/i);
     expect(errorMessage).toBeInTheDocument();
   });
 
