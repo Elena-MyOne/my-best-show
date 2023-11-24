@@ -21,10 +21,22 @@ const CardItems: React.FC<CardItemsProps> = ({ shows }) => {
           {shows.map((item) => {
             if (Object.prototype.hasOwnProperty.call(item, 'show')) {
               const showItem = item as SearchShowsData;
-              return <Card key={showItem.show.id} show={showItem.show} setIsCardItemsDarked={() => dispatch(setIsCardItemsDarked(true))} />;
+              return (
+                <Card
+                  key={showItem.show.id}
+                  show={showItem.show}
+                  setIsCardItemsDarked={() => dispatch(setIsCardItemsDarked(true))}
+                />
+              );
             } else {
               const show = item as ShowData;
-              return <Card key={show.id} show={show} setIsCardItemsDarked={() => dispatch(setIsCardItemsDarked(true))} />;
+              return (
+                <Card
+                  key={show.id}
+                  show={show}
+                  setIsCardItemsDarked={() => dispatch(setIsCardItemsDarked(true))}
+                />
+              );
             }
           })}
         </div>
