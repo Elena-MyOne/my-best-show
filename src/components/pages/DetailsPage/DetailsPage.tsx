@@ -69,8 +69,9 @@ const DetailsPage: React.FC = () => {
     data && getShowById(data);
   }, [data, getShowById]);
 
-  const years = `${show.premiered ? show.premiered.slice(0, 4) : ''} ${show.ended ? '- ' + show.ended.slice(0, 4) : ''
-    } `;
+  const years = `${show.premiered ? show.premiered.slice(0, 4) : ''} ${
+    show.ended ? '- ' + show.ended.slice(0, 4) : ''
+  } `;
 
   return (
     <>
