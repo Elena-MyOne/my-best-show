@@ -81,49 +81,47 @@ const MainPage: React.FC = () => {
   };
 
   return (
-    <>
-      <ErrorBoundary>
-        <>
-          <div className={style.top}>
-            <h1 className="title">Shows List</h1>
-            {!isCardItemsDarked && (
-              <div className="pagination">
-                {shows && shows.length < ITEMS_PER_PAGE ? null : <Pagination />}
-              </div>
-            )}
-          </div>
-        </>
-        {isLoadingMainPage || isLoading ? (
-          <Loader />
-        ) : isLoadingError || isSearchError ? (
-          <ErrorMessage />
-        ) : (
-          <>
-            <div className={style.content}>
-              {shows.length ? (
-                <div className={style.items} onClick={closeDetails}>
-                  {isMoreShows ? (
-                    <CardItems shows={shows} />
-                  ) : (
-                    <CardItems shows={currentPageItems} />
-                  )}
-                </div>
-              ) : (
-                <div className={style.nothing}>Upsy, nothing to show &#128550;</div>
-              )}
-
-              <div className={style.details}>
-                <Outlet />
-              </div>
+    <ErrorBoundary>
+      <>
+        <div className={style.top}>
+          <h1 className="title">Shows List</h1>
+          {!isCardItemsDarked && (
+            <div className="pagination">
+              {shows && shows.length < ITEMS_PER_PAGE ? null : <Pagination />}
             </div>
-
-            {!isLoadingMainPage && (
-              <ShowMoreShowsButton showMoreShows={showMoreShows} isMoreShows={isMoreShows} />
+          )}
+        </div>
+      </>
+      {isLoadingMainPage || isLoading ? (
+        <Loader />
+      ) : isLoadingError || isSearchError ? (
+        <ErrorMessage />
+      ) : (
+        <>
+          <div className={style.content}>
+            {shows.length ? (
+              <div className={style.items} onClick={closeDetails}>
+                {isMoreShows ? (
+                  <CardItems shows={shows} />
+                ) : (
+                  <CardItems shows={currentPageItems} />
+                )}
+              </div>
+            ) : (
+              <div className={style.nothing}>Upsy, nothing to show &#128550;</div>
             )}
-          </>
-        )}
-      </ErrorBoundary>
-    </>
+
+            <div className={style.details}>
+              <Outlet />
+            </div>
+          </div>
+
+          {!isLoadingMainPage && (
+            <ShowMoreShowsButton showMoreShows={showMoreShows} isMoreShows={isMoreShows} />
+          )}
+        </>
+      )}
+    </ErrorBoundary>
   );
 };
 
