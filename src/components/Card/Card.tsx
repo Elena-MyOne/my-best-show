@@ -30,7 +30,7 @@ const Card: React.FC<CardProps> = ({ show, setIsCardItemsDarked }) => {
         >
           <div className={style.image}>
             {image ? (
-              <img src={show.image.medium} alt="cover" />
+              <img src={image} alt="cover" />
             ) : (
               <div className={style.cover}>My Best TV Show</div>
             )}
@@ -55,7 +55,6 @@ const Card: React.FC<CardProps> = ({ show, setIsCardItemsDarked }) => {
         <div className={style.error}>Show is not available in this moment, please try later</div>
       )}
     </>
-
   );
 };
 
