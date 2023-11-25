@@ -33,7 +33,7 @@ const Header: React.FC = () => {
     localStorage.setItem('TVShowSearch', searchValue);
     searchShowsData && dispatch(handleSearch(searchShowsData));
     isError && dispatch(setIsError(isError));
-    <Link href={`/${ROUTER_PATHS.SEARCH}?q=${encodeURIComponent(searchValue)}`} />
+    <Link href={`/${ROUTER_PATHS.SEARCH}?q=${encodeURIComponent(searchValue)}`} />;
   };
 
   const handleSearchForm = (event: React.FormEvent) => {
