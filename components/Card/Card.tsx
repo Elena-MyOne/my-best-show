@@ -10,8 +10,9 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ show, setIsCardItemsDarked }) => {
-  const years = `${show && show.premiered ? show.premiered.slice(0, 4) : ''} ${show && show.ended ? '- ' + show.ended.slice(0, 4) : ''
-    } `;
+  const years = `${show && show.premiered ? show.premiered.slice(0, 4) : ''} ${
+    show && show.ended ? '- ' + show.ended.slice(0, 4) : ''
+  } `;
 
   const image = show && show.image?.medium;
 
