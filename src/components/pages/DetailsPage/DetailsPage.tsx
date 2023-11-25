@@ -1,31 +1,20 @@
-import React, { useContext } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import style from './DetailsPage.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ROUTER_PATHS, URL } from '../../../models/enums';
-import { ShowData } from '../../../models/interfaces';
+import { ROUTER_PATHS } from '../../../models/enums';
 import { AiFillStar } from 'react-icons/ai';
 import { GoLinkExternal } from 'react-icons/go';
 import Spinner from '../../Spinner/Spinner';
-import { AppContext } from '../../../Contexts/AppContext';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../redux/store';
+import { setIsCardItemsDarked } from '../../../redux/slices/ShowsSlice';
+import { useGetShowByIdQuery } from '../../../redux/api/apiSlice';
+import { ShowData } from '../../../models/interfaces';
 
 const DetailsPage: React.FC = () => {
-  const { id } = useParams();
-
-  const navigate = useNavigate();
-
-  const { setIsCardItemsDarked } = useContext(AppContext);
-
-  const goBack = () => {
-    navigate(`${ROUTER_PATHS.MAIN}`);
-    if (setIsCardItemsDarked) {
-      setIsCardItemsDarked(false);
-    }
-  };
-
   const noDate = 'no data to show';
 
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [show, setShow] = React.useState({
+  const [show, setShow] = useState({
     id: 0,
     image: '',
     name: '',
@@ -38,53 +27,52 @@ const DetailsPage: React.FC = () => {
     officialSite: '',
   });
 
-  const getShowById = async () => {
-    if (isLoading) {
-      return;
-    }
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-    setIsLoading(true);
+  const dispatch = useDispatch<AppDispatch>();
+  const { data, isLoading, isSuccess, isError, error } = useGetShowByIdQuery(id!);
 
-    try {
-      const response = await fetch(`${URL.SHOWS}/${id}`);
-
-      if (!response.ok) {
-        throw new Error('Network response error');
-      }
-
-      const data: ShowData = await response.json();
-
-      show.genres = [];
-      const image = data.image?.original || '';
-
-      setShow({
-        id: data.id,
-        image,
-        name: data.name,
-        rating: data.rating.average,
-        language: data.language,
-        summary: data.summary,
-        genres: data.genres || [noDate],
-        premiered: data.premiered,
-        ended: data.ended,
-        officialSite: data.officialSite,
-      });
-
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-    }
+  const goBack = () => {
+    navigate(`${ROUTER_PATHS.MAIN}`);
+    dispatch(setIsCardItemsDarked(false));
   };
 
-  React.useEffect(() => {
-    getShowById();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  const getShowById = useCallback(
+    (data: ShowData) => {
+      if (isError && error) {
+        console.error(error);
+      }
 
-  const years = `${show.premiered ? show.premiered.slice(0, 4) : ''} ${
-    show.ended ? '- ' + show.ended.slice(0, 4) : ''
-  } `;
+      if (isSuccess) {
+        show.genres = [];
+        const image = data.image?.original || '';
+
+        setShow({
+          id: data.id,
+          image,
+          name: data.name,
+          rating: data.rating.average,
+          language: data.language,
+          summary: data.summary,
+          genres: data.genres || [noDate],
+          premiered: data.premiered,
+          ended: data.ended,
+          officialSite: data.officialSite,
+        });
+      }
+    },
+    [isError, error, isSuccess, show]
+  );
+
+  useEffect(() => {
+    data && getShowById(data);
+  }, [data, getShowById]);
+
+  const showStarted = show.premiered ? show.premiered.slice(0, 4) : '';
+  const showEnded = show.ended ? '- ' + show.ended.slice(0, 4) : '';
+
+  const years = `${showStarted} ${showEnded} `;
 
   return (
     <>

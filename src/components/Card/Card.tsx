@@ -10,50 +10,52 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ show, setIsCardItemsDarked }) => {
-  if (show === null) {
-    return <div className={style.error}>No show data available</div>;
-  }
-
-  const years = `${show.premiered ? show.premiered.slice(0, 4) : ''} ${
-    show.ended ? '- ' + show.ended.slice(0, 4) : ''
+  const years = `${show && show.premiered ? show.premiered.slice(0, 4) : ''} ${
+    show && show.ended ? '- ' + show.ended.slice(0, 4) : ''
   } `;
 
-  const image = show.image?.medium;
+  const image = show && show.image?.medium;
 
   const setDarkBackground = () => {
     if (setIsCardItemsDarked) setIsCardItemsDarked(true);
   };
 
   return (
-    <Link
-      to={`/shows/details/${show.id}`}
-      className={style.card}
-      onClick={setDarkBackground}
-      data-testid="card"
-    >
-      <div className={style.image}>
-        {image ? (
-          <img src={show.image.medium} alt="cover" />
-        ) : (
-          <div className={style.cover}>My Best TV Show</div>
-        )}
+    <>
+      {show ? (
+        <Link
+          to={`/shows/details/${show.id}`}
+          className={style.card}
+          onClick={setDarkBackground}
+          data-testid="card"
+        >
+          <div className={style.image}>
+            {image ? (
+              <img src={image} alt="cover" />
+            ) : (
+              <div className={style.cover}>My Best TV Show</div>
+            )}
 
-        <div className={style.top}>
-          <div className={style.rating}>
-            <AiFillStar />
-            {show.rating &&
-              (show.rating.average ? (
-                <span className={style.average}>{show.rating.average}</span>
-              ) : (
-                <span className={style.average}>Not rated</span>
-              ))}
+            <div className={style.top}>
+              <div className={style.rating}>
+                <AiFillStar />
+                {show.rating &&
+                  (show.rating.average ? (
+                    <span className={style.average}>{show.rating.average}</span>
+                  ) : (
+                    <span className={style.average}>Not rated</span>
+                  ))}
+              </div>
+              {show.genres && <div className={style.genres}>{show.genres.join(', ')}</div>}
+              <div className={style.years}>{years}</div>
+            </div>
           </div>
-          {show.genres && <div className={style.genres}>{show.genres.join(', ')}</div>}
-          <div className={style.years}>{years}</div>
-        </div>
-      </div>
-      <h3 className={style.name}>{show.name}</h3>
-    </Link>
+          <h3 className={style.name}>{show.name}</h3>
+        </Link>
+      ) : (
+        <div className={style.error}>Show is not available in this moment, please try later</div>
+      )}
+    </>
   );
 };
 

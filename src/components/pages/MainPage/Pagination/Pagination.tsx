@@ -1,52 +1,64 @@
-import React, { useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import style from './Pagination.module.scss';
 import { LAST_PAGE } from '../../../../constants/page.constants';
-import { AppContext } from '../../../../Contexts/AppContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../../../redux/store';
+import {
+  loadShows,
+  selectShows,
+  setApiCallPage,
+  setCurrentPage,
+  setIsIsLoading,
+} from '../../../../redux/slices/ShowsSlice';
+import { useLoadShowsQuery } from '../../../../redux/api/apiSlice';
 
 const Pagination: React.FC = () => {
-  const [isNextDisabled, setIsNextDisabled] = React.useState(false);
-  const [isPrevDisabled, setIsPrevDisabled] = React.useState(false);
+  const [isNextDisabled, setIsNextDisabled] = useState<boolean>(false);
+  const [isPrevDisabled, setIsPrevDisabled] = useState<boolean>(false);
 
+  const dispatch = useDispatch<AppDispatch>();
   const {
-    loadShows,
-    isShowMoreButtonDisable,
-    currentPage = 0,
-    setCurrentPage,
-    prevPage,
     nextPage,
-  } = useContext(AppContext);
+    prevPage,
+    currentPage = 0,
+    switchMoreShows,
+    apiCallPage,
+  } = useSelector(selectShows);
+
+  const { data: showsData, isLoading: isLoadingOnPagination } = useLoadShowsQuery(apiCallPage);
+
+  React.useEffect(() => {
+    dispatch(setIsIsLoading(isLoadingOnPagination));
+  }, [dispatch, isLoadingOnPagination]);
 
   const handleNextButton = async () => {
-    if (!isShowMoreButtonDisable && nextPage !== null) {
-      if (loadShows && nextPage && setCurrentPage) {
-        await loadShows(nextPage);
-        setCurrentPage(nextPage);
-      }
+    if (!switchMoreShows && nextPage !== null) {
+      dispatch(setApiCallPage(nextPage));
+      showsData && dispatch(loadShows(showsData));
+      dispatch(setCurrentPage(nextPage));
     }
   };
 
   const handlePrevButton = async () => {
-    if (!isShowMoreButtonDisable && prevPage !== null) {
-      if (loadShows && setCurrentPage && prevPage) {
-        await loadShows(prevPage);
-        setCurrentPage(prevPage);
-      }
+    if (!switchMoreShows && prevPage !== null && prevPage != undefined) {
+      dispatch(setApiCallPage(prevPage));
+      showsData && dispatch(loadShows(showsData));
+      dispatch(setCurrentPage(prevPage));
     }
   };
 
   const handleLast = async () => {
-    if (!isShowMoreButtonDisable && LAST_PAGE) {
-      if (loadShows && setCurrentPage) {
-        await loadShows(LAST_PAGE);
-        setCurrentPage(LAST_PAGE);
-      }
+    if (!switchMoreShows && LAST_PAGE) {
+      dispatch(setApiCallPage(LAST_PAGE));
+      showsData && dispatch(loadShows(showsData));
+      dispatch(setCurrentPage(LAST_PAGE ?? 0));
     }
   };
 
-  React.useEffect(() => {
-    setIsNextDisabled(isShowMoreButtonDisable || nextPage === null);
-    setIsPrevDisabled(isShowMoreButtonDisable || prevPage === null);
-  }, [isShowMoreButtonDisable, nextPage, prevPage]);
+  useEffect(() => {
+    setIsNextDisabled(switchMoreShows || nextPage === null || currentPage >= LAST_PAGE);
+    setIsPrevDisabled(switchMoreShows || prevPage === null || currentPage === 0);
+  }, [switchMoreShows, nextPage, prevPage, currentPage]);
 
   return (
     <div className={style.buttons}>

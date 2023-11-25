@@ -1,35 +1,45 @@
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import style from './Header.module.scss';
+import { useSelector, useDispatch } from 'react-redux';
 import { MdLocalMovies } from 'react-icons/md';
 import { BsSearch } from 'react-icons/bs';
 import { ROUTER_PATHS } from '../../models/enums';
-import { Link } from 'react-router-dom';
-import { AppContext } from '../../Contexts/AppContext';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  handleSearch,
+  selectShows,
+  setIsError,
+  setSearchValue,
+} from '../../redux/slices/ShowsSlice';
+import { AppDispatch } from '../../redux/store';
+import { useSearchShowsQuery } from '../../redux/api/apiSlice';
+import { getSearchValueFromLocalStorage } from '../../utils/getSearchValueFromLocalStorage';
 
 const Header: React.FC = () => {
-  const { handleSearch } = useContext(AppContext);
+  const [inputValue, setInputValue] = useState<string>(getSearchValueFromLocalStorage());
 
-  const [value, setValue] = React.useState<string>('');
+  const { searchValue } = useSelector(selectShows);
+  const dispatch = useDispatch<AppDispatch>();
 
-  React.useEffect(() => {
-    const savedValue = localStorage.getItem('TVShowSearch') || '';
-    setValue(savedValue);
-  }, []);
+  const navigate = useNavigate();
 
-  const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
-    const target = e.currentTarget.value;
-    setValue(target);
+  const { data: searchShowsData, isError } = useSearchShowsQuery(searchValue);
+
+  const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const target = event.currentTarget.value;
+    setInputValue(target);
   };
 
   const handleButtonClick = () => {
-    localStorage.setItem('TVShowSearch', value);
-    if (handleSearch) {
-      handleSearch();
-    }
+    dispatch(setSearchValue(inputValue));
+    localStorage.setItem('TVShowSearch', searchValue);
+    searchShowsData && dispatch(handleSearch(searchShowsData));
+    isError && dispatch(setIsError(isError));
+    navigate(`/${ROUTER_PATHS.SEARCH}?q=${encodeURIComponent(searchValue)}`);
   };
 
-  const handleSearchForm = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSearchForm = (event: React.FormEvent) => {
+    event.preventDefault();
     handleButtonClick();
   };
 
@@ -46,7 +56,7 @@ const Header: React.FC = () => {
             className={style.input}
             placeholder="Search show..."
             onChange={handleChange}
-            value={value}
+            value={inputValue}
           />
           <button className={style.button} onClick={handleButtonClick}>
             <BsSearch />

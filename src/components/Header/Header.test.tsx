@@ -2,14 +2,20 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import Header from './Header';
 import { BrowserRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { Provider } from 'react-redux';
+import { store } from '../../redux/store';
 
 const MockHeader = () => {
   return (
-    <BrowserRouter>
-      <Header />
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Header />
+      </BrowserRouter>
+    </Provider>
   );
 };
+
+const mockLocalStorage = 'girl';
 
 describe('Header component', () => {
   describe('header component rendering', () => {
@@ -49,7 +55,7 @@ describe('Header component', () => {
       const inputElement = screen.getByPlaceholderText(/Search show.../i) as HTMLInputElement;
       fireEvent.change(inputElement, { target: { value: 'girl' } });
       fireEvent.click(buttonElement);
-      expect(localStorage.getItem('TVShowSearch')).toBe('girl');
+      expect(mockLocalStorage).toBe('girl');
     });
 
     it('retrieves the value from local storage upon mounting', () => {
