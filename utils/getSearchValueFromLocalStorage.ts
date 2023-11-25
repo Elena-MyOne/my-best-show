@@ -1,3 +1,7 @@
 export const getSearchValueFromLocalStorage = () => {
-  return localStorage.getItem('TVShowSearch') ?? '';
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('TVShowSearch') ?? '';
+  }
+
+  return '';
 };
