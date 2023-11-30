@@ -44,7 +44,7 @@
   @media (max-width: ($md3+px)) {
     width: 200px;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     z-index: 2;
   }
 }
