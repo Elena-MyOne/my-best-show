@@ -20,7 +20,7 @@ import {
 import { AppDispatch } from '../../redux/store';
 import { useLoadShowsQuery, useSearchShowsQuery } from '../../redux/api/apiSlice';
 import { useRouter } from 'next/router';
-
+import DetailsPage from '../../pages/details/[id]';
 
 const MainPage: React.FC = () => {
   const [isMoreShows, setIsMoreShows] = useState<boolean>(false);
@@ -43,7 +43,6 @@ const MainPage: React.FC = () => {
     if (searchValue) {
       searchShowsData && dispatch(handleSearch(searchShowsData));
       if (!isCardItemsDarked) {
-        // navigate(`/${ROUTER_PATHS.SEARCH}?q=${encodeURIComponent(searchValue)}`);
         router.push(`/?q=${encodeURIComponent(searchValue)}`);
       }
     } else {
@@ -62,6 +61,7 @@ const MainPage: React.FC = () => {
     apiCallPage,
     shows.length,
     isCardItemsDarked,
+    router,
   ]);
 
   const currentPageItems = shows && shows.slice(0, DEFAULT_ITEMS_PER_PAGE);
@@ -107,8 +107,7 @@ const MainPage: React.FC = () => {
               <div className={style.nothing}>Upsy, nothing to show &#128550;</div>
             )}
 
-            <div className={style.details}>
-            </div>
+            <div className={style.details}>{isCardItemsDarked && <DetailsPage />}</div>
           </div>
 
           {!isLoadingMainPage && (

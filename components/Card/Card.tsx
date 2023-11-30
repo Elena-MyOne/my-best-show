@@ -24,7 +24,8 @@ const Card: React.FC<CardProps> = ({ show, setIsCardItemsDarked }) => {
     <>
       {show ? (
         <Link
-          href={`/shows/details/${show.id}`}
+          href="/details/[id]"
+          as={`/details/${show.id}`}
           className={style.card}
           onClick={setDarkBackground}
           data-testid="card"
